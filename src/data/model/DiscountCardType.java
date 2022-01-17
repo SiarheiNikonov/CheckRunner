@@ -1,4 +1,6 @@
-enum DiscountCardType {
+package data.model;
+
+public enum DiscountCardType {
     WOODEN(1),
     SILVER(3),
     GOLD(5),

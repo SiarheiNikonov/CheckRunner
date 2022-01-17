@@ -1,3 +1,5 @@
+package data.model;
+
 public class DiscountCard {
     private int id;
     private DiscountCardType cardType;

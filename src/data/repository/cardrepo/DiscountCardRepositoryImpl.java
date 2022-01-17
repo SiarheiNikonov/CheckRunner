@@ -1,3 +1,8 @@
+package data.repository.cardrepo;
+
+import data.model.DiscountCard;
+import data.model.DiscountCardType;
+
 public class DiscountCardRepositoryImpl implements DiscountCardRepository {
 
     @Override

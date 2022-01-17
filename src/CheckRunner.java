@@ -1,11 +1,46 @@
+import data.model.DiscountCard;
+import data.model.Product;
+import data.repository.cardrepo.DiscountCardRepository;
+import data.repository.cardrepo.FileDiscountCardRepositoryImpl;
+import data.repository.productrepo.FileProductRepositoryImpl;
+import data.repository.productrepo.ProductRepository;
+import util.Constants;
+import util.exceptions.RepositoryInitializationException;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CheckRunner {
     private Map<Product, Integer> map = new LinkedHashMap();
     private DiscountCard card;
-    DiscountCardRepository cardRepo = new DiscountCardRepositoryImpl();
-    ProductRepository prodRepo = ProductRepositoryImpl.getInstance();
+    private DiscountCardRepository cardRepo;
+    private ProductRepository prodRepo;
+    private PrintStream stream;
+    private CheckReceiptPrinter printer;
+
+    CheckRunner() {
+
+        try {
+            cardRepo = FileDiscountCardRepositoryImpl.getInstance();
+            prodRepo = FileProductRepositoryImpl.getInstance();
+        } catch (RepositoryInitializationException e) {
+            System.out.println("Something went wrong.");
+            System.out.println(e.getLocalizedMessage());
+            System.exit(1);
+        }
+
+        try {
+            stream = new PrintStream(Constants.RECEIPT_FILE_NAME);
+
+        } catch (IOException e) {
+            stream = System.out;
+            stream.println("Something went wrong.");
+            stream.println(e.getLocalizedMessage());
+        }
+        printer = new CheckReceiptPrinter(stream);
+    }
 
     public static void main(String[] args) {
         CheckRunner checkRunner = new CheckRunner();
@@ -18,47 +53,7 @@ public class CheckRunner {
             }
         }
 
-        System.out.println("CASH RECEIPT");
-        System.out.println("SOME USELESS INFO");
-
-        long total = 0;
-        long wholesaleDiscount = 0;
-        long cardDiscount = 0;
-        long discount;
-
-        for (Map.Entry<Product, Integer> entry : checkRunner.map.entrySet()) {
-            Product product = entry.getKey();
-            int price = product.getPriceInCents();
-            int fullCost = price * entry.getValue();
-            total += fullCost;
-
-            System.out.print(
-                    entry.getValue() + " " +
-                            product.getTitle() + " " +
-                            checkRunner.toDollarsWithCents(product.getPriceInCents()) + " " +
-                            checkRunner.toDollarsWithCents(fullCost)
-            );
-
-            if (product.isOnSale() && entry.getValue() > 5) {
-                discount = Math.round(fullCost * 0.1);
-                wholesaleDiscount += discount;
-                System.out.println("(-" + checkRunner.toDollarsWithCents(discount) + ")");
-            } else System.out.println();
-        }
-
-        System.out.println("SUMMARY COST: " + checkRunner.toDollarsWithCents(total));
-        if (wholesaleDiscount != 0) System.out.println("WHOLESALE DISCOUNT: " +
-                checkRunner.toDollarsWithCents(wholesaleDiscount));
-
-        if (checkRunner.card != null) {
-            cardDiscount = Math.round((total - wholesaleDiscount) * checkRunner.card.getCardType().getDiscount() / 100.0);
-            System.out.println("CARD DISCOUNT: " + checkRunner.toDollarsWithCents(cardDiscount));
-        }
-
-        System.out.println("TOTAL " + checkRunner.toDollarsWithCents(total - wholesaleDiscount - cardDiscount));
-    }
-
-    private String toDollarsWithCents(long costInCents) {
-        return "$" + costInCents / 100 + "," + costInCents % 100;
+        List<String> rows = CheckReceiptCalculator.calculateCheckReceipt(checkRunner.map, checkRunner.card);
+        checkRunner.printer.printCheckReceipt(rows);
     }
 }

@@ -1,3 +1,5 @@
+package data.model;
+
 public class Product {
     private int id;
     private String title;
