@@ -1,4 +1,4 @@
-package main.java.util;
+package util;
 
 public final class Constants {
     public static final String PRODUCT_FILE_NAME = "products.json";

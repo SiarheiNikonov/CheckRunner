@@ -1,4 +1,4 @@
-package main.java.util.exceptions;
+package util.exceptions;
 
 public class RepositoryInitializationException extends Exception {
     public RepositoryInitializationException(String message) {

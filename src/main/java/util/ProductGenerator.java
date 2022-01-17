@@ -1,6 +1,7 @@
-package main.java.util;
+package util;
 
-import main.java.data.model.Product;
+import data.model.Product;
+
 import java.util.ArrayList;
 import java.util.List;
 

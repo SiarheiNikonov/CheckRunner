@@ -1,12 +1,12 @@
-package main.java.data.repository.productrepo;
+package data.repository.productrepo;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import main.java.data.model.Product;
-import main.java.util.Constants;
-import main.java.util.exceptions.ProductNotFoundException;
-import main.java.util.exceptions.RepositoryInitializationException;
+import data.model.Product;
+import util.Constants;
+import util.exceptions.ProductNotFoundException;
+import util.exceptions.RepositoryInitializationException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

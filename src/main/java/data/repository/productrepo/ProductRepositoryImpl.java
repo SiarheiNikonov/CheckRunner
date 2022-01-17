@@ -1,7 +1,8 @@
-package main.java.data.repository.productrepo;
+package data.repository.productrepo;
 
-import main.java.data.model.Product;
-import main.java.util.ProductGenerator;
+import data.model.Product;
+import util.ProductGenerator;
+
 import java.util.List;
 
 public class ProductRepositoryImpl implements ProductRepository {

@@ -1,11 +1,11 @@
-package main.java.util;
+package util;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import main.java.data.model.DiscountCard;
-import main.java.data.model.DiscountCardType;
-import main.java.data.model.Product;
+import data.model.DiscountCard;
+import data.model.DiscountCardType;
+import data.model.Product;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;

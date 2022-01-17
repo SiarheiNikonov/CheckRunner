@@ -1,6 +1,6 @@
-package main.java.data.repository.cardrepo;
+package data.repository.cardrepo;
 
-import main.java.data.model.DiscountCard;
+import data.model.DiscountCard;
 
 public interface DiscountCardRepository {
     DiscountCard getCardById(int id);

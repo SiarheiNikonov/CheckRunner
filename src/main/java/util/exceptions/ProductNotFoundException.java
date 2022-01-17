@@ -1,4 +1,4 @@
-package main.java.util.exceptions;
+package util.exceptions;
 
 public class ProductNotFoundException extends IllegalArgumentException {
     public ProductNotFoundException(String message) {

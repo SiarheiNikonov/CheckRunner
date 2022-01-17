@@ -1,13 +1,12 @@
-package main.java;
+import data.model.DiscountCard;
+import data.model.Product;
+import data.repository.cardrepo.DiscountCardRepository;
+import data.repository.cardrepo.FileDiscountCardRepositoryImpl;
+import data.repository.productrepo.FileProductRepositoryImpl;
+import data.repository.productrepo.ProductRepository;
+import util.Constants;
+import util.exceptions.RepositoryInitializationException;
 
-import main.java.data.model.DiscountCard;
-import main.java.data.model.Product;
-import main.java.data.repository.cardrepo.DiscountCardRepository;
-import main.java.data.repository.cardrepo.FileDiscountCardRepositoryImpl;
-import main.java.data.repository.productrepo.FileProductRepositoryImpl;
-import main.java.data.repository.productrepo.ProductRepository;
-import main.java.util.Constants;
-import main.java.util.exceptions.RepositoryInitializationException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.LinkedHashMap;

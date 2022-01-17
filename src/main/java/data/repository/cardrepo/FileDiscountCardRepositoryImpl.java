@@ -1,12 +1,12 @@
-package main.java.data.repository.cardrepo;
+package data.repository.cardrepo;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import main.java.data.model.DiscountCard;
-import main.java.util.Constants;
-import main.java.util.exceptions.CardNotFoundException;
-import main.java.util.exceptions.RepositoryInitializationException;
+import data.model.DiscountCard;
+import util.Constants;
+import util.exceptions.CardNotFoundException;
+import util.exceptions.RepositoryInitializationException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

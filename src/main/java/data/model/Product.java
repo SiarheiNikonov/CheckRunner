@@ -1,4 +1,4 @@
-package main.java.data.model;
+package data.model;
 
 public class Product {
     private int id;

@@ -1,4 +1,4 @@
-package main.java.data.model;
+package data.model;
 
 public enum DiscountCardType {
     WOODEN(1),

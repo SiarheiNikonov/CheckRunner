@@ -1,10 +1,10 @@
-package main.java.data.model;
+package data.model;
 
 public class DiscountCard {
     private int id;
     private DiscountCardType cardType;
 
-    public DiscountCard(int id, DiscountCardType cardType) {
+    public DiscountCard(int id,DiscountCardType cardType) {
         this.id = id;
         this.cardType = cardType;
     }

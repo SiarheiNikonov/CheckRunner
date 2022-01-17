@@ -1,6 +1,7 @@
-package main.java.data.repository.productrepo;
+package data.repository.productrepo;
 
-import main.java.data.model.Product;
+
+import data.model.Product;
 
 public interface ProductRepository {
     Product getProductById(int id);
