@@ -1,5 +1,7 @@
-import data.model.DiscountCard;
-import data.model.Product;
+package main.java;
+
+import main.java.data.model.DiscountCard;
+import main.java.data.model.Product;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;

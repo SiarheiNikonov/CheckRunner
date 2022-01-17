@@ -1,7 +1,7 @@
-package data.repository.cardrepo;
+package main.java.data.repository.cardrepo;
 
-import data.model.DiscountCard;
-import data.model.DiscountCardType;
+import main.java.data.model.DiscountCard;
+import main.java.data.model.DiscountCardType;
 
 public class DiscountCardRepositoryImpl implements DiscountCardRepository {
 
