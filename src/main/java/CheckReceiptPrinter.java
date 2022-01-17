@@ -14,6 +14,7 @@ class CheckReceiptPrinter {
             stream.println(row);
         }
         stream.flush();
+        stream.close();
     }
 
 }
