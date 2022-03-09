@@ -19,6 +19,16 @@ public class Product {
         this.onSale = onSale;
     }
 
+    public Product(int id, String title, int priceInCents) {
+        this.id = id;
+        this.title = title;
+        this.priceInCents = priceInCents;
+        this.description = "description";
+        this.producer = "producer";
+        this.barcode = -1;
+        this.onSale = false;
+    }
+
     public int getId() {
         return id;
     }
