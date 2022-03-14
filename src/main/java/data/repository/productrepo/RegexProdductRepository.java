@@ -22,8 +22,10 @@ public class RegexProdductRepository {
         BufferedReader reader = new BufferedReader(fr);
         FileWriter fw = new FileWriter(wrongProductsFile);
         BufferedWriter writer = new BufferedWriter(fw);
-
-        String regex = "^([1-9][0-9]?|100);\\p{Lu}\\p{Ll}{2,29};([1-9][0-9]?|100).\\d{2};([1-9]|1\\d|20)$";
+        String regex =
+                "^([1-9][0-9]?|100);([A-Z][a-z]{2,29}|[А-Я][а-я]{2,29});([1-9][0-9]?.\\d{2}|100.00);([1-9]|1\\d|20)$";
+        // Так было красиво, но неправильно
+        //String regex = "^([1-9][0-9]?|100);\\p{Lu}\\p{Ll}{2,29};([1-9][0-9]?|100).\\d{2};([1-9]|1\\d|20)$";
         while (reader.ready()) {
             String product = reader.readLine();
             if (!Pattern.matches(regex, product)) {
