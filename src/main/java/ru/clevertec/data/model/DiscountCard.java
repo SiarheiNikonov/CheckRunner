@@ -1,4 +1,4 @@
-package data.model;
+package ru.clevertec.data.model;
 
 public class DiscountCard {
     private int id;

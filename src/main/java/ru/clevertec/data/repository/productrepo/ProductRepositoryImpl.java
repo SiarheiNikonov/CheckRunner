@@ -1,7 +1,7 @@
-package data.repository.productrepo;
+package ru.clevertec.data.repository.productrepo;
 
-import data.model.Product;
-import util.ProductGenerator;
+import ru.clevertec.data.model.Product;
+import ru.clevertec.util.ProductGenerator;
 
 import java.util.List;
 

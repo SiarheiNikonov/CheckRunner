@@ -1,12 +1,12 @@
-package data.repository.productrepo;
+package ru.clevertec.data.repository.productrepo;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import data.model.Product;
-import util.Constants;
-import util.exceptions.ProductNotFoundException;
-import util.exceptions.RepositoryInitializationException;
+import ru.clevertec.data.model.Product;
+import ru.clevertec.util.Constants;
+import ru.clevertec.util.exceptions.ProductNotFoundException;
+import ru.clevertec.util.exceptions.RepositoryInitializationException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

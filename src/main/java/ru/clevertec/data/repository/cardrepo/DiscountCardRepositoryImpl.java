@@ -1,8 +1,8 @@
-package data.repository.cardrepo;
+package ru.clevertec.data.repository.cardrepo;
 
 
-import data.model.DiscountCard;
-import data.model.DiscountCardType;
+import ru.clevertec.data.model.DiscountCard;
+import ru.clevertec.data.model.DiscountCardType;
 
 public class DiscountCardRepositoryImpl implements DiscountCardRepository {
 

@@ -1,5 +1,7 @@
-import data.model.DiscountCard;
-import data.model.Product;
+package ru.clevertec;
+
+import ru.clevertec.data.model.DiscountCard;
+import ru.clevertec.data.model.Product;
 
 import java.util.LinkedList;
 import java.util.List;

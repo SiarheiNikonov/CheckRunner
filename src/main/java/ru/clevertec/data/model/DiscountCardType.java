@@ -1,4 +1,4 @@
-package data.model;
+package ru.clevertec.data.model;
 
 public enum DiscountCardType {
     WOODEN(1),

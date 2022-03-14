@@ -1,7 +1,9 @@
-import data.model.Product;
-import data.repository.productrepo.RegexProdductRepository;
-import util.Constants;
-import util.exceptions.RepositoryInitializationException;
+package ru.clevertec;
+
+import ru.clevertec.data.model.Product;
+import ru.clevertec.data.repository.productrepo.RegexProdductRepository;
+import ru.clevertec.util.Constants;
+import ru.clevertec.util.exceptions.RepositoryInitializationException;
 
 import java.io.IOException;
 import java.io.PrintStream;
