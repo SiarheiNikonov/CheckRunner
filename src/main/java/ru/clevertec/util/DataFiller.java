@@ -1,11 +1,11 @@
-package util;
+package ru.clevertec.util;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
-import data.model.DiscountCard;
-import data.model.DiscountCardType;
-import data.model.Product;
+import ru.clevertec.data.model.DiscountCard;
+import ru.clevertec.data.model.DiscountCardType;
+import ru.clevertec.data.model.Product;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;

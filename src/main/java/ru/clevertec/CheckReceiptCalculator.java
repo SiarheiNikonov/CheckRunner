@@ -1,6 +1,8 @@
+package ru.clevertec;
 
-import data.model.DiscountCard;
-import data.model.Product;
+import ru.clevertec.data.model.DiscountCard;
+import ru.clevertec.data.model.Product;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -52,6 +54,6 @@ public class CheckReceiptCalculator {
     }
 
     private static String toDollarsWithCents(long costInCents) {
-        return "$" + costInCents / 100 + "," + costInCents % 100;
+        return String.format("%.2f", (costInCents / 100f));
     }
 }

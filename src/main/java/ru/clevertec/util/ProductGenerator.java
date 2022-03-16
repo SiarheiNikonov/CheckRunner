@@ -1,6 +1,6 @@
-package util;
+package ru.clevertec.util;
 
-import data.model.Product;
+import ru.clevertec.data.model.Product;
 
 import java.util.ArrayList;
 import java.util.List;

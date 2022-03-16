@@ -1,16 +1,16 @@
-import data.model.DiscountCard;
-import data.model.Product;
-import data.repository.cardrepo.FileDiscountCardRepositoryImpl;
-import data.repository.productrepo.FileProductRepositoryImpl;
-import util.exceptions.RepositoryInitializationException;
+package ru.clevertec;
+
+import ru.clevertec.data.model.DiscountCard;
+import ru.clevertec.data.model.Product;
+import ru.clevertec.data.repository.cardrepo.FileDiscountCardRepositoryImpl;
+import ru.clevertec.data.repository.productrepo.FileProductRepositoryImpl;
+import ru.clevertec.util.exceptions.RepositoryInitializationException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.List;

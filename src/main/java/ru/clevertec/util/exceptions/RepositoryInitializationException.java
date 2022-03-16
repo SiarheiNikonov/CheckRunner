@@ -1,4 +1,4 @@
-package util.exceptions;
+package ru.clevertec.util.exceptions;
 
 public class RepositoryInitializationException extends Exception {
     public RepositoryInitializationException(String message) {

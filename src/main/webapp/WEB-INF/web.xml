@@ -4,7 +4,7 @@
          id="WebApp_ID" version="3.0">
     <servlet>
         <servlet-name>checkReceiptServlet</servlet-name>
-        <servlet-class>TestServlet</servlet-class>
+        <servlet-class>ru.clevertec.TestServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
