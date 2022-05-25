@@ -4,6 +4,7 @@ import ru.clevertec.data.model.DiscountCard;
 import ru.clevertec.data.model.Product;
 import ru.clevertec.data.repository.cardrepo.FileDiscountCardRepositoryImpl;
 import ru.clevertec.data.repository.productrepo.FileProductRepositoryImpl;
+import ru.clevertec.util.Constants;
 import ru.clevertec.util.exceptions.RepositoryInitializationException;
 
 import javax.servlet.ServletException;
@@ -28,8 +29,8 @@ public class TestServlet extends HttpServlet {
         PrintWriter writer = resp.getWriter();
 
         try {
-            cardRepo = FileDiscountCardRepositoryImpl.getInstance();
-            productRepository = FileProductRepositoryImpl.getInstance();
+            cardRepo = FileDiscountCardRepositoryImpl.getInstance(Constants.CARD_FILE_NAME);
+            productRepository = FileProductRepositoryImpl.getInstance(Constants.PRODUCT_FILE_NAME);
             Map<String, String[]> map = req.getParameterMap();
             for (Map.Entry<String, String[]> entry : map.entrySet()) {
                 if (entry.getKey().equals("card")) {

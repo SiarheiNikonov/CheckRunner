@@ -7,6 +7,7 @@ import ru.clevertec.data.model.Product;
 import ru.clevertec.util.Constants;
 import ru.clevertec.util.exceptions.ProductNotFoundException;
 import ru.clevertec.util.exceptions.RepositoryInitializationException;
+import ru.clevertec.util.exceptions.UnknownProductIdException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -19,11 +20,11 @@ public class FileProductRepositoryImpl implements ProductRepository {
     private List<Product> products;
     private static FileProductRepositoryImpl instance;
 
-    private FileProductRepositoryImpl() throws RepositoryInitializationException {
+    private FileProductRepositoryImpl(String fileName) throws RepositoryInitializationException {
         Moshi moshi = (new Moshi.Builder()).build();
         Type type = Types.newParameterizedType(List.class, Product.class);
         JsonAdapter<List<Product>> adapter = moshi.adapter(type);
-        try (BufferedReader reader = new BufferedReader(new FileReader(Constants.PRODUCT_FILE_NAME))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             String string = reader.readLine();
             products = adapter.fromJson(string);
         } catch (IOException e) {
@@ -33,6 +34,7 @@ public class FileProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Product getProductById(int id) throws ProductNotFoundException {
+        if(id <= 0) throw new UnknownProductIdException("Unknown product id");
         for (Product product : products) {
             if (product.getId() == id) return product;
         }
@@ -40,8 +42,8 @@ public class FileProductRepositoryImpl implements ProductRepository {
     }
 
 
-    public static FileProductRepositoryImpl getInstance() throws RepositoryInitializationException {
-        if (instance == null) instance = new FileProductRepositoryImpl();
+    public static FileProductRepositoryImpl getInstance(String fileName) throws RepositoryInitializationException {
+        if (instance == null) instance = new FileProductRepositoryImpl(fileName);
         return instance;
     }
 }
