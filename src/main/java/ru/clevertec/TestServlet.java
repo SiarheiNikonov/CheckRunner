@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,23 +33,19 @@ public class TestServlet extends HttpServlet {
             cardRepo = FileDiscountCardRepositoryImpl.getInstance(Constants.CARD_FILE_NAME);
             productRepository = FileProductRepositoryImpl.getInstance(Constants.PRODUCT_FILE_NAME);
             Map<String, String[]> map = req.getParameterMap();
-            for (Map.Entry<String, String[]> entry : map.entrySet()) {
-                if (entry.getKey().equals("card")) {
-                    card = cardRepo.getCardById(Integer.parseInt(entry.getValue()[0]));
-                } else {
-                    Product product = productRepository.getProductById(Integer.parseInt(entry.getKey()));
-                    int qty = 0;
-                    for (String i : entry.getValue()) {
-                        qty += Integer.parseInt(i);
-                    }
-                    productMap.put(product, qty);
-                }
-            }
+            map.entrySet().stream().forEach( param -> {
+                if (param.getKey().equals("card")) {
+                card = cardRepo.getCardById(Integer.parseInt(param.getValue()[0]));
+            } else {
+                Product product = productRepository.getProductById(Integer.parseInt(param.getKey()));
+                int qty = Arrays.stream(param.getValue()).map(Integer::parseInt).reduce(0, (a, b)->a+b);
+                productMap.put(product, qty);
+            }});
+
             List<String> rows = CheckReceiptCalculator.calculateCheckReceipt(productMap, card);
 
-            for(String s: rows) {
-                writer.println(s);
-            }
+            rows.stream().forEach(writer::println);
+
         } catch (RepositoryInitializationException e) {
             writer.println("Something went wrong. Try later.");
         } catch (NumberFormatException e) {

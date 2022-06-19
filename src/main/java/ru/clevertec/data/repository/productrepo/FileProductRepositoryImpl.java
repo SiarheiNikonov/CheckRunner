@@ -5,6 +5,7 @@ import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import ru.clevertec.data.model.Product;
 import ru.clevertec.util.Constants;
+import ru.clevertec.util.exceptions.CardNotFoundException;
 import ru.clevertec.util.exceptions.ProductNotFoundException;
 import ru.clevertec.util.exceptions.RepositoryInitializationException;
 import ru.clevertec.util.exceptions.UnknownProductIdException;
@@ -34,11 +35,12 @@ public class FileProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Product getProductById(int id) throws ProductNotFoundException {
+
         if(id <= 0) throw new UnknownProductIdException("Unknown product id");
-        for (Product product : products) {
-            if (product.getId() == id) return product;
-        }
-        throw new ProductNotFoundException(Constants.UNKNOWN_PRODUCT_MESSAGE);
+       
+        return products.stream().filter(product -> product.getId() == id).findFirst().orElseThrow(() ->
+                new ProductNotFoundException(Constants.UNKNOWN_PRODUCT_MESSAGE));
+
     }
 
 

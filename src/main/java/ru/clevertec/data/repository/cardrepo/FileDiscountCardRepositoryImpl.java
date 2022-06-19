@@ -35,10 +35,9 @@ public class FileDiscountCardRepositoryImpl implements DiscountCardRepository {
 
     @Override
     public DiscountCard getCardById(int id) throws CardNotFoundException {
-        for (DiscountCard card : cards) {
-            if (card.getId() == id) return card;
-        }
-        throw new CardNotFoundException(Constants.UNKNOWN_CARD_MESSAGE);
+        //Кривая переделка. В цикле могли найти первое совпадение и вернуть его.
+        //В данном случае сначала фильтруются ВСЕ элементы, потом проверяется не попался ли такой.
+        return cards.stream().filter(card -> card.getId() == id).findFirst().orElseThrow(() -> new CardNotFoundException(Constants.UNKNOWN_CARD_MESSAGE));
     }
 
     public static FileDiscountCardRepositoryImpl getInstance(String fileName) throws RepositoryInitializationException {
