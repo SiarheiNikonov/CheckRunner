@@ -19,11 +19,11 @@ public class FileDiscountCardRepositoryImpl implements DiscountCardRepository {
     private List<DiscountCard> cards;
     private static FileDiscountCardRepositoryImpl instance;
 
-    private FileDiscountCardRepositoryImpl() throws RepositoryInitializationException {
+    private FileDiscountCardRepositoryImpl(String fileName) throws RepositoryInitializationException {
         Moshi moshi = (new Moshi.Builder()).build();
         Type type = Types.newParameterizedType(List.class, DiscountCard.class);
         JsonAdapter<List<DiscountCard>> adapter = moshi.adapter(type);
-        try (BufferedReader reader = new BufferedReader(new FileReader(Constants.CARD_FILE_NAME))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             if (reader.ready()) {
                 String json = reader.readLine();
                 cards = adapter.fromJson(json);
@@ -40,8 +40,8 @@ public class FileDiscountCardRepositoryImpl implements DiscountCardRepository {
         return cards.stream().filter(card -> card.getId() == id).findFirst().orElseThrow(() -> new CardNotFoundException(Constants.UNKNOWN_CARD_MESSAGE));
     }
 
-    public static FileDiscountCardRepositoryImpl getInstance() throws RepositoryInitializationException {
-        if (instance == null) instance = new FileDiscountCardRepositoryImpl();
+    public static FileDiscountCardRepositoryImpl getInstance(String fileName) throws RepositoryInitializationException {
+        if (instance == null) instance = new FileDiscountCardRepositoryImpl(fileName);
         return instance;
     }
 }

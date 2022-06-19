@@ -27,8 +27,8 @@ public class CheckRunner {
     CheckRunner() {
 
         try {
-            cardRepo = FileDiscountCardRepositoryImpl.getInstance();
-            prodRepo = FileProductRepositoryImpl.getInstance();
+            cardRepo = FileDiscountCardRepositoryImpl.getInstance(Constants.CARD_FILE_NAME);
+            prodRepo = FileProductRepositoryImpl.getInstance(Constants.PRODUCT_FILE_NAME);
         } catch (RepositoryInitializationException e) {
             System.out.println("Something went wrong.");
             System.out.println(e.getLocalizedMessage());

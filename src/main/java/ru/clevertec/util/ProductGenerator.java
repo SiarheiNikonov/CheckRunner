@@ -8,7 +8,7 @@ import java.util.List;
 public class ProductGenerator {
     public static List<Product> getProducts() {
         List<Product> products = new ArrayList(50);
-        for (int i = 0; i < 50; i++) {
+        for (int i = 1; i <= 50; i++) {
             Long priceInCents = Math.round(Math.random() * 9990 + 10);
             String producer;
             switch (i % 5) {

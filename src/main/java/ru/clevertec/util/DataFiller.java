@@ -27,7 +27,7 @@ public class DataFiller {
 
     private static void fillCardFile(String file) {
         List<DiscountCard> cards = new ArrayList<>(50);
-        for (int i = 0; i < 50; i++) {
+        for (int i = 1; i <= 50; i++) {
             DiscountCard card;
             switch (i % 4) {
                 case (1):
