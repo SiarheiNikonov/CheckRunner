@@ -11,6 +11,7 @@ import ru.clevertec.util.exceptions.RepositoryInitializationException;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,14 +48,14 @@ public class CheckRunner {
 
     public static void main(String[] args) {
         CheckRunner checkRunner = new CheckRunner();
-        for (String arg : args) {
+        Arrays.stream(args).forEach(arg -> {
             String[] data = arg.split("-");
             if (data[0].equals("card")) {
                 checkRunner.card = checkRunner.cardRepo.getCardById(Integer.parseInt(data[1]));
             } else {
                 checkRunner.map.put(checkRunner.prodRepo.getProductById(Integer.parseInt(data[0])), Integer.parseInt(data[1]));
             }
-        }
+        });
 
         List<String> rows = CheckReceiptCalculator.calculateCheckReceipt(checkRunner.map, checkRunner.card);
         checkRunner.printer.printCheckReceipt(rows);

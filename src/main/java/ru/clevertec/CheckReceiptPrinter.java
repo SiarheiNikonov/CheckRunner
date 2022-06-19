@@ -11,9 +11,7 @@ class CheckReceiptPrinter {
     }
 
     public void printCheckReceipt(List<String> rows){
-        for(String row : rows) {
-            stream.println(row);
-        }
+        rows.stream().forEach(System.out::println);
         stream.flush();
         stream.close();
     }

@@ -20,6 +20,14 @@ public class CheckReceiptCalculator {
         long cardDiscount = 0;
         long discount;
 
+
+        /*
+        Тут ругается:
+        Variable used in lambda expression should be final or effectively final
+        Да и смысла менять на стрим не вижу, многовато логики
+        map.entrySet().stream().forEach(entry -> );
+        */
+
         for (Map.Entry<Product, Integer> entry : map.entrySet()) {
             Product product = entry.getKey();
             int price = product.getPriceInCents();

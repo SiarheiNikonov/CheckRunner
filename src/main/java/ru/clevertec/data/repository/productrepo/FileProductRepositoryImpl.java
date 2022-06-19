@@ -5,6 +5,7 @@ import com.squareup.moshi.Moshi;
 import com.squareup.moshi.Types;
 import ru.clevertec.data.model.Product;
 import ru.clevertec.util.Constants;
+import ru.clevertec.util.exceptions.CardNotFoundException;
 import ru.clevertec.util.exceptions.ProductNotFoundException;
 import ru.clevertec.util.exceptions.RepositoryInitializationException;
 
@@ -33,10 +34,10 @@ public class FileProductRepositoryImpl implements ProductRepository {
 
     @Override
     public Product getProductById(int id) throws ProductNotFoundException {
-        for (Product product : products) {
-            if (product.getId() == id) return product;
-        }
-        throw new ProductNotFoundException(Constants.UNKNOWN_PRODUCT_MESSAGE);
+        //Кривая переделка. В цикле могли найти первое совпадение и вернуть его.
+        //В данном случае сначала фильтруются ВСЕ элементы, потом проверяется не попался ли такой.
+        return products.stream().filter(product -> product.getId() == id).findFirst().orElseThrow(() ->
+                new ProductNotFoundException(Constants.UNKNOWN_PRODUCT_MESSAGE));
     }
 
 
