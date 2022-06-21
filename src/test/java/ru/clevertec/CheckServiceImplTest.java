@@ -5,13 +5,14 @@ import org.junit.jupiter.api.Test;
 import ru.clevertec.data.model.DiscountCard;
 import ru.clevertec.data.model.DiscountCardType;
 import ru.clevertec.data.model.Product;
+import ru.clevertec.service.CheckServiceImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CheckReceiptCalculatorTest {
+public class CheckServiceImplTest {
 
     @Test
     void calculateCheckReceiptTest() {
@@ -29,7 +30,7 @@ public class CheckReceiptCalculatorTest {
         Map<Product, Integer> productsList = new HashMap<>();
         productsList.put(product, count);
 
-        List<String> actualCheck = CheckReceiptCalculator.calculateCheckReceipt(
+        List<String> actualCheck = new CheckServiceImpl(null).calculateCheckReceipt(
                 productsList,
                 card
         );

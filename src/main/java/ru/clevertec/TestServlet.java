@@ -4,6 +4,7 @@ import ru.clevertec.data.model.DiscountCard;
 import ru.clevertec.data.model.Product;
 import ru.clevertec.data.repository.cardrepo.FileDiscountCardRepositoryImpl;
 import ru.clevertec.data.repository.productrepo.FileProductRepositoryImpl;
+import ru.clevertec.service.CheckServiceImpl;
 import ru.clevertec.util.Constants;
 import ru.clevertec.util.exceptions.RepositoryInitializationException;
 
@@ -25,11 +26,14 @@ public class TestServlet extends HttpServlet {
     private Map<Product, Integer> productMap = new LinkedHashMap<>();
     private DiscountCard card;
 
+    private CheckServiceImpl service;
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter writer = resp.getWriter();
 
         try {
+            service = new CheckServiceImpl(null);
             cardRepo = FileDiscountCardRepositoryImpl.getInstance(Constants.CARD_FILE_NAME);
             productRepository = FileProductRepositoryImpl.getInstance(Constants.PRODUCT_FILE_NAME);
             Map<String, String[]> map = req.getParameterMap();
@@ -42,7 +46,7 @@ public class TestServlet extends HttpServlet {
                 productMap.put(product, qty);
             }});
 
-            List<String> rows = CheckReceiptCalculator.calculateCheckReceipt(productMap, card);
+            List<String> rows = service.calculateCheckReceipt(productMap, card);
 
             rows.stream().forEach(writer::println);
 

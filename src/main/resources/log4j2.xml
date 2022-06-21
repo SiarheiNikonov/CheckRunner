@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Properties>
+        <property name="pattern_console">
+            %d{ABSOLUTE} %-5level %logger{1} - %msg%n
+        </property>
+        <property name="pattern_text_file">
+            %d{ISO8601} %-5level %logger{} - %msg%n
+        </property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern_console}"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="Console" level="debug"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
