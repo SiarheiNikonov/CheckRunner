@@ -1,15 +1,27 @@
-package ru.clevertec;
+package ru.clevertec.service;
 
 import ru.clevertec.data.model.DiscountCard;
 import ru.clevertec.data.model.Product;
 
+import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class CheckReceiptCalculator {
+public class CheckServiceImpl implements CheckService {
 
-    public static List<String> calculateCheckReceipt(Map<Product, Integer> map, DiscountCard card) {
+    private PrintStream stream;
+    public CheckServiceImpl(PrintStream stream) {
+        this.stream = stream;
+    }
+
+    public void printCheckReceipt(List<String> rows){
+        rows.stream().forEach(System.out::println);
+        stream.flush();
+        stream.close();
+    }
+
+    public List<String> calculateCheckReceipt(Map<Product, Integer> map, DiscountCard card) {
         List<String> rows = new LinkedList<>();
 
         rows.add("CASH RECEIPT");
@@ -19,14 +31,6 @@ public class CheckReceiptCalculator {
         long wholesaleDiscount = 0;
         long cardDiscount = 0;
         long discount;
-
-
-        /*
-        Тут ругается:
-        Variable used in lambda expression should be final or effectively final
-        Да и смысла менять на стрим не вижу, многовато логики
-        map.entrySet().stream().forEach(entry -> );
-        */
 
         for (Map.Entry<Product, Integer> entry : map.entrySet()) {
             Product product = entry.getKey();
@@ -61,7 +65,7 @@ public class CheckReceiptCalculator {
         return rows;
     }
 
-    private static String toDollarsWithCents(long costInCents) {
+    private String toDollarsWithCents(long costInCents) {
         return String.format("%.2f", (costInCents / 100f));
     }
 }

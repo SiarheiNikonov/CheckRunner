@@ -2,6 +2,7 @@ package ru.clevertec;
 
 import ru.clevertec.data.model.Product;
 import ru.clevertec.data.repository.productrepo.RegexProdductRepository;
+import ru.clevertec.service.CheckServiceImpl;
 import ru.clevertec.util.Constants;
 import ru.clevertec.util.exceptions.RepositoryInitializationException;
 
@@ -13,7 +14,8 @@ import java.util.Map;
 public class RegexCheckRunner {
     private Map<Product, Integer> map;
     private PrintStream stream;
-    private CheckReceiptPrinter printer;
+    private CheckServiceImpl service;
+
 
     RegexCheckRunner() {
 
@@ -25,14 +27,14 @@ public class RegexCheckRunner {
             stream.println("Something went wrong.");
             stream.println(e.getLocalizedMessage());
         }
-        printer = new CheckReceiptPrinter(stream);
+        service = new CheckServiceImpl(stream);
     }
 
     public static void main(String[] args) throws RepositoryInitializationException {
         RegexProdductRepository repo = RegexProdductRepository.getInstance();
         RegexCheckRunner checkRunner = new RegexCheckRunner();
         checkRunner.map = repo.getOrder();
-        List<String> rows = CheckReceiptCalculator.calculateCheckReceipt(checkRunner.map, null);
-        checkRunner.printer.printCheckReceipt(rows);
+        List<String> rows = checkRunner.service.calculateCheckReceipt(checkRunner.map, null);
+        checkRunner.service.printCheckReceipt(rows);
     }
 }
