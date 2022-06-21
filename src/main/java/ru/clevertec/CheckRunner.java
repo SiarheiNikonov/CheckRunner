@@ -6,11 +6,15 @@ import ru.clevertec.data.repository.cardrepo.DiscountCardRepository;
 import ru.clevertec.data.repository.cardrepo.FileDiscountCardRepositoryImpl;
 import ru.clevertec.data.repository.productrepo.FileProductRepositoryImpl;
 import ru.clevertec.data.repository.productrepo.ProductRepository;
+import ru.clevertec.service.CheckService;
+import ru.clevertec.service.CheckServiceImpl;
+import ru.clevertec.service.handler.CheckServiceHandler;
 import ru.clevertec.util.Constants;
 import ru.clevertec.util.exceptions.RepositoryInitializationException;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,7 +26,7 @@ public class CheckRunner {
     private DiscountCardRepository cardRepo;
     private ProductRepository prodRepo;
     private PrintStream stream;
-    private CheckReceiptPrinter printer;
+    private CheckService service;
 
     CheckRunner() {
 
@@ -43,7 +47,10 @@ public class CheckRunner {
             stream.println("Something went wrong.");
             stream.println(e.getLocalizedMessage());
         }
-        printer = new CheckReceiptPrinter(stream);
+        service = new CheckServiceImpl(stream);
+        ClassLoader loader = service.getClass().getClassLoader();
+        Class[] interfaces = service.getClass().getInterfaces();
+        service = (CheckService) Proxy.newProxyInstance(loader, interfaces, new CheckServiceHandler(service));
     }
 
     public static void main(String[] args) {
@@ -57,7 +64,7 @@ public class CheckRunner {
             }
         });
 
-        List<String> rows = CheckReceiptCalculator.calculateCheckReceipt(checkRunner.map, checkRunner.card);
-        checkRunner.printer.printCheckReceipt(rows);
+        List<String> rows = checkRunner.service.calculateCheckReceipt(checkRunner.map, checkRunner.card);
+        checkRunner.service.printCheckReceipt(rows);
     }
 }
