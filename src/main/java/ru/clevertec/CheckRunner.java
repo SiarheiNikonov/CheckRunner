@@ -3,14 +3,15 @@ package ru.clevertec;
 import ru.clevertec.data.model.DiscountCard;
 import ru.clevertec.data.model.Product;
 import ru.clevertec.data.repository.cardrepo.DiscountCardRepository;
-import ru.clevertec.data.repository.cardrepo.FileDiscountCardRepositoryImpl;
-import ru.clevertec.data.repository.productrepo.FileProductRepositoryImpl;
+import ru.clevertec.data.repository.cardrepo.JdbcDiscountCardRepositoryImpl;
+import ru.clevertec.data.repository.productrepo.JdbcProductRepositoryImpl;
 import ru.clevertec.data.repository.productrepo.ProductRepository;
 import ru.clevertec.service.CheckService;
 import ru.clevertec.service.CheckServiceImpl;
 import ru.clevertec.service.handler.CheckServiceHandler;
 import ru.clevertec.util.Constants;
 import ru.clevertec.util.exceptions.RepositoryInitializationException;
+import ru.clevertec.util.jdbc.ConnectionPool;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CheckRunner {
-    private Map<Product, Integer> map = new LinkedHashMap();
+    private final Map<Product, Integer> map = new LinkedHashMap<>();
     private DiscountCard card;
     private DiscountCardRepository cardRepo;
     private ProductRepository prodRepo;
@@ -29,10 +30,10 @@ public class CheckRunner {
     private CheckService service;
 
     CheckRunner() {
-
         try {
-            cardRepo = FileDiscountCardRepositoryImpl.getInstance(Constants.CARD_FILE_NAME);
-            prodRepo = FileProductRepositoryImpl.getInstance(Constants.PRODUCT_FILE_NAME);
+            ConnectionPool connectionPool = ConnectionPool.getInstance(3);
+            cardRepo = JdbcDiscountCardRepositoryImpl.getInstance(connectionPool);
+            prodRepo = JdbcProductRepositoryImpl.getInstance(connectionPool);
         } catch (RepositoryInitializationException e) {
             System.out.println("Something went wrong.");
             System.out.println(e.getLocalizedMessage());
