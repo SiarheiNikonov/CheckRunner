@@ -22,7 +22,11 @@ public class ConnectionPool implements ConnectionReleaser {
         registerDriver();
         for (int i = 0; i < poolSize; i++) {
             try {
-                Connection conn = DriverManager.getConnection(PropsKt.URL, PropsKt.USER, PropsKt.PASSWORD);
+                Connection conn = DriverManager.getConnection(
+                        String.format(PropsKt.URL, PropsKt.DATABASE_NAME),
+                        PropsKt.USER,
+                        PropsKt.PASSWORD
+                );
                 connectionPool.offer(new ReusableConnection(conn, this));
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -5,7 +5,7 @@ public enum DiscountCardType {
     SILVER(3),
     GOLD(5),
     PLATINUM(10);
-    private int discount;
+    private final int discount;
 
     DiscountCardType(int discount) {
         this.discount = discount;

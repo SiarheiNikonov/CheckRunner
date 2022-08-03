@@ -1,15 +1,15 @@
 package ru.clevertec.data.model;
 
 public class DiscountCard {
-    private int id;
-    private DiscountCardType cardType;
+    private final Integer id;
+    private final DiscountCardType cardType;
 
-    public DiscountCard(int id,DiscountCardType cardType) {
+    public DiscountCard(Integer id, DiscountCardType cardType) {
         this.id = id;
         this.cardType = cardType;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

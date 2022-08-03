@@ -1,15 +1,15 @@
 package ru.clevertec.data.model;
 
 public class Product {
-    private int id;
-    private String title;
-    private int priceInCents;
-    private String description;
-    private String producer;
-    private long barcode;
-    private boolean onSale;
+    private Integer id;
+    private final String title;
+    private final int priceInCents;
+    private final String description;
+    private final Company producer;
+    private final long barcode;
+    private final boolean onSale;
 
-    public Product(int id, String title, int priceInCents, String description, String producer, long barcode, boolean onSale) {
+    public Product(Integer id, String title, int priceInCents, String description, Company producer, long barcode, boolean onSale) {
         this.id = id;
         this.title = title;
         this.priceInCents = priceInCents;
@@ -18,18 +18,26 @@ public class Product {
         this.barcode = barcode;
         this.onSale = onSale;
     }
+    public Product(String title, int priceInCents, String description, Company producer, long barcode, boolean onSale) {
+        this.title = title;
+        this.priceInCents = priceInCents;
+        this.description = description;
+        this.producer = producer;
+        this.barcode = barcode;
+        this.onSale = onSale;
+    }
 
-    public Product(int id, String title, int priceInCents) {
+    public Product(Integer id, String title, int priceInCents) {
         this.id = id;
         this.title = title;
         this.priceInCents = priceInCents;
         this.description = "description";
-        this.producer = "producer";
+        this.producer = null;
         this.barcode = -1;
         this.onSale = false;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -45,7 +53,7 @@ public class Product {
         return description;
     }
 
-    public String getProducer() {
+    public Company getProducer() {
         return producer;
     }
 

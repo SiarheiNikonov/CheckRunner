@@ -6,8 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseInitializer {
-    private static final String CREATE_DATABASE_QUERY = "DROP DATABASE IF EXISTS products;\n" +
-            "CREATE DATABASE products WITH ENCODING 'UTF8';\n";
+    private static final String CREATE_DATABASE_QUERY = "CREATE DATABASE " + PropsKt.DATABASE_NAME + " WITH ENCODING 'UTF8';\n";
 
     private static final String FILL_DATABASE_QUERY = "CREATE TABLE company (\n" +
             "company_id SERIAL PRIMARY KEY,\n" +
@@ -91,14 +90,14 @@ public class DatabaseInitializer {
         Class.forName(PropsKt.DRIVER);
         try (Connection conn = DriverManager
                 .getConnection(
-                        "jdbc:postgresql://127.0.0.1:5432/postgres?characterEncoding=utf8",
+                        String.format(PropsKt.URL, "postgres"),
                         PropsKt.USER,
                         PropsKt.PASSWORD
                 )) {
             PreparedStatement st = conn.prepareStatement(CREATE_DATABASE_QUERY);
             st.execute();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return;
         }
 
         try (Connection conn = DriverManager
