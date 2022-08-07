@@ -7,11 +7,9 @@ import java.util.List;
 public interface CrudRepository <T>{
     T getById(int id) throws RepositoryException;
 
-    boolean add(T item) throws RepositoryException;
+    T add(T item) throws RepositoryException;
 
-    boolean removeById(Integer id) throws RepositoryException;
-
-    boolean remove(T product) throws RepositoryException;
+    boolean remove(Integer id) throws RepositoryException;
 
     boolean update(T product) throws RepositoryException;
 

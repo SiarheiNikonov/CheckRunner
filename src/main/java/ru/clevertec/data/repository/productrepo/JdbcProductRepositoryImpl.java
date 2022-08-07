@@ -103,12 +103,12 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public boolean add(Product product) throws RepositoryException {
+    public Product add(Product product) throws RepositoryException {
         return addOrUpdate(product, false);
     }
 
     @Override
-    public boolean removeById(Integer id) throws RepositoryException {
+    public boolean remove(Integer id) throws RepositoryException {
         try (Connection conn = connectionPool.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(REMOVE_PRODUCT_BY_ID_QUERY);
             statement.setInt(1, id);
@@ -120,16 +120,11 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public boolean remove(Product product) throws RepositoryException {
-        return removeById(product.getId());
-    }
-
-    @Override
     public boolean update(Product product) throws RepositoryException {
-        return addOrUpdate(product, true);
+        return addOrUpdate(product, true) != null;
     }
 
-    private boolean addOrUpdate(Product product, boolean update) throws RepositoryException {
+    private Product addOrUpdate(Product product, boolean update) throws RepositoryException {
         try (Connection connection = connectionPool.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(update ? UPDATE_PRODUCT_QUERY : ADD_PRODUCT_QUERY);
             statement.setString(1, product.getTitle());
@@ -139,8 +134,19 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
             statement.setLong(5, product.getBarcode());
             statement.setBoolean(6, product.isOnSale());
             if (update) statement.setInt(7, product.getId());
-            int changedRows = statement.executeUpdate();
-            return changedRows == 1;
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int id = resultSet.getInt("product_id");
+                return new Product(
+                        id,
+                        product.getTitle(),
+                        product.getPriceInCents(),
+                        product.getDescription(),
+                        product.getProducer(),
+                        product.getBarcode(),
+                        product.isOnSale()
+                );
+            } else return null;
         } catch (SQLException e) {
             throw new RepositoryException(e, "Something went wrong");
         }

@@ -49,14 +49,15 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public Result<Boolean> add(DiscountCard card) {
-        boolean result;
+        DiscountCard result;
         try {
             result = repo.add(card);
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if (result) return new Success<>(true);
-        else return new Fail<>(String.format(UNSUCCESSFUL_OPERATION_MESSAGE, "adding", card.getId()), REQUEST_ERROR_CODE);
+        if (result != null) return new Success<>(true);
+        else
+            return new Fail<>(String.format(UNSUCCESSFUL_OPERATION_MESSAGE, "adding", card.getId()), REQUEST_ERROR_CODE);
     }
 
     @Override
@@ -71,11 +72,6 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Result<Boolean> remove(DiscountCard card) {
-        return removeCardById(card.getId());
-    }
-
-    @Override
     public Result<Boolean> update(DiscountCard card) {
 
         boolean result;
@@ -84,8 +80,9 @@ public class CardServiceImpl implements CardService {
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if(result) return new Success<>(true);
-        else return new Fail<>(String.format(UNSUCCESSFUL_OPERATION_MESSAGE, "updating", card.getId()), REQUEST_ERROR_CODE);
+        if (result) return new Success<>(true);
+        else
+            return new Fail<>(String.format(UNSUCCESSFUL_OPERATION_MESSAGE, "updating", card.getId()), REQUEST_ERROR_CODE);
     }
 
     @Override
@@ -98,10 +95,10 @@ public class CardServiceImpl implements CardService {
         } catch (NumberFormatException e) {
             return new Fail<>(WRONG_PAGE_OR_LAST_ID_MESSAGE, REQUEST_ERROR_CODE);
         }
-        if(isNumberNegativeOrZero(pageSize)) {
+        if (isNumberNegativeOrZero(pageSize)) {
             return new Fail<>(String.format(NEGATIVE_PAGE_OR_LAST_ID_MESSAGE, "Page", pageSize), REQUEST_ERROR_CODE);
         }
-        if(isNumberNegativeOrZero(lastItemId)) {
+        if (isNumberNegativeOrZero(lastItemId)) {
             return new Fail<>(String.format(NEGATIVE_PAGE_OR_LAST_ID_MESSAGE, "Last item id", pageSize), REQUEST_ERROR_CODE);
         }
         List<DiscountCard> cards;
@@ -118,11 +115,11 @@ public class CardServiceImpl implements CardService {
         return number <= 0;
     }
 
-    private Result<Boolean> removeCardById(int id){
+    private Result<Boolean> removeCardById(int id) {
         if (isNumberNegativeOrZero(id)) return new Fail<>(String.format(NEGATIVE_ID_MESSAGE, id), REQUEST_ERROR_CODE);
         boolean result;
         try {
-            result = repo.removeById(id);
+            result = repo.remove(id);
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }

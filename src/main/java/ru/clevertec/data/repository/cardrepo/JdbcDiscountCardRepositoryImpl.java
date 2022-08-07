@@ -88,7 +88,7 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
         }
     }
 
-    public boolean removeById(Integer id) throws RepositoryException {
+    public boolean remove(Integer id) throws RepositoryException {
         try (Connection conn = pool.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(REMOVE_CARD_BY_ID_QUERY);
             statement.setInt(1, id);
@@ -98,11 +98,6 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
         } catch (SQLException e) {
             throw new RepositoryException(e, "Something went wrong");
         }
-    }
-
-    @Override
-    public boolean remove(DiscountCard card) throws RepositoryException {
-        return removeById(card.getId());
     }
 
     @Override
@@ -120,21 +115,24 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
     }
 
     @Override
-    public boolean add(DiscountCard card) throws RepositoryException {
+    public DiscountCard add(DiscountCard card) throws RepositoryException {
         try (Connection conn = pool.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(GET_DISCOUNT_CARD_TYPE_ID_BY_TITLE_QUERY);
             statement.setString(1, card.getCardType().name());
             ResultSet resultSet = statement.executeQuery();
             int typeId;
             if (resultSet.next()) {
-                typeId = resultSet.getInt(1);
-            } else return false;
+                typeId = resultSet.getInt("type_id");
+            } else return null;
             statement.close();
             statement = conn.prepareStatement(ADD_CARD_QUERY);
             statement.setInt(1, typeId);
-            int changedRow = statement.executeUpdate();
-            statement.close();
-            return changedRow == 1;
+            resultSet = statement.executeQuery();
+            if(resultSet.next()) {
+                int id = resultSet.getInt("card_id");
+                statement.close();
+                return new DiscountCard(id, card.getCardType());
+            } else return null;
         } catch (SQLException e) {
             throw new RepositoryException(e, "Something went wrong");
         }

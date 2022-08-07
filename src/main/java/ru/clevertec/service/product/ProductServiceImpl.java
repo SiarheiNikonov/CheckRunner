@@ -50,13 +50,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Result<Boolean> add(Product product) {
-        boolean result;
+        Product result;
         try {
             result = repo.add(product);
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if (result) return new Success<>(true);
+        if (result != null) return new Success<>(true);
         else return new Fail<>(String.format(UNSUCCESSFUL_OPERATION_MESSAGE, "adding", product.getId()), REQUEST_ERROR_CODE);
     }
 
@@ -69,11 +69,6 @@ public class ProductServiceImpl implements ProductService {
             return new Fail<>(String.format(WRONG_ID_FORMAT_MESSAGE, idText), REQUEST_ERROR_CODE);
         }
         return removeProductById(id);
-    }
-
-    @Override
-    public Result<Boolean> remove(Product product) {
-        return removeProductById(product.getId());
     }
 
     @Override
@@ -119,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
         if (isNumberNegativeOrZero(id)) return new Fail<>(String.format(NEGATIVE_ID_MESSAGE, id), REQUEST_ERROR_CODE);
         boolean result;
         try {
-            result = repo.removeById(id);
+            result = repo.remove(id);
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
