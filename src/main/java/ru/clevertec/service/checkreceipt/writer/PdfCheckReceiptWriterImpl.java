@@ -42,9 +42,6 @@ public class PdfCheckReceiptWriterImpl implements CheckReceiptWriter {
         image.setAbsolutePosition(0, 0);
         canvas.addImage(image);
         document.close();
-
-
-        document.close();
     }
 
     private void addCellToTable(Phrase phrase, PdfPCell cell, PdfPTable table) {
