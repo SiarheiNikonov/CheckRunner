@@ -1,17 +1,21 @@
 package ru.clevertec.service.card;
 
+import com.google.gson.Gson;
 import ru.clevertec.data.model.DiscountCard;
 import ru.clevertec.data.model.state.Fail;
 import ru.clevertec.data.model.state.Result;
 import ru.clevertec.data.model.state.Success;
 import ru.clevertec.data.repository.CrudRepository;
 import ru.clevertec.data.repository.cardrepo.DiscountCardRepository;
+import ru.clevertec.service.RequestMethod;
 import ru.clevertec.util.exceptions.RepositoryException;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class CardServiceImpl implements CardService {
 
+    private static final String PAGING_REGEX = "^last_index=[1-9]+\\d*&page_size=[1-9]+\\d*$";
     private static final String PROBLEM_WITH_DB_MESSAGE = "Problem with db has occurred";
     private static final String NEGATIVE_ID_MESSAGE = "Card id = %d is not valid (negative or zero)";
     private static final String WRONG_ID_FORMAT_MESSAGE = "Wrong id format (%s)";
@@ -29,7 +33,27 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Result<DiscountCard> getById(String idText) {
+    public Result<String> handleRequest(String data, RequestMethod method) {
+        switch (method) {
+            case GET: {
+                return handleGetRequest(data);
+            }
+            case PUT: {
+                DiscountCard card = new Gson().fromJson(data, DiscountCard.class);
+                return update(card);
+            }
+            case POST: {
+                DiscountCard card = new Gson().fromJson(data, DiscountCard.class);
+                return add(card);
+            }
+            case DELETE: {
+                return removeById(data);
+            }
+        }
+        return new Fail<>("Unknown method", 400);
+    }
+
+    private Result<String> getById(String idText) {
         int id;
         try {
             id = Integer.parseInt(idText);
@@ -44,24 +68,23 @@ public class CardServiceImpl implements CardService {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
         if (card == null) return new Fail<>(String.format(CARD_WITH_ID_NOT_FOUND_MESSAGE, id), REQUEST_ERROR_CODE);
-        else return new Success<>(card);
+        String result = new Gson().toJson(card);
+        return new Success<>(result);
     }
 
-    @Override
-    public Result<Boolean> add(DiscountCard card) {
+    private Result<String> add(DiscountCard card) {
         DiscountCard result;
         try {
             result = repo.add(card);
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if (result != null) return new Success<>(true);
+        if (result != null) return new Success<>("Card has been added");
         else
             return new Fail<>(String.format(UNSUCCESSFUL_OPERATION_MESSAGE, "adding", card.getId()), REQUEST_ERROR_CODE);
     }
 
-    @Override
-    public Result<Boolean> removeById(String idText) {
+    private Result<String> removeById(String idText) {
         int id;
         try {
             id = Integer.parseInt(idText);
@@ -71,8 +94,7 @@ public class CardServiceImpl implements CardService {
         return removeCardById(id);
     }
 
-    @Override
-    public Result<Boolean> update(DiscountCard card) {
+    private Result<String> update(DiscountCard card) {
 
         boolean result;
         try {
@@ -80,13 +102,12 @@ public class CardServiceImpl implements CardService {
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if (result) return new Success<>(true);
+        if (result) return new Success<>("Card has been updated");
         else
             return new Fail<>(String.format(UNSUCCESSFUL_OPERATION_MESSAGE, "updating", card.getId()), REQUEST_ERROR_CODE);
     }
 
-    @Override
-    public Result<List<DiscountCard>> findAll(String pageSizeText, String lastItemIdText) {
+    private Result<String> findAll(String pageSizeText, String lastItemIdText) {
         int pageSize;
         int lastItemId;
         try {
@@ -107,7 +128,10 @@ public class CardServiceImpl implements CardService {
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if (!cards.isEmpty()) return new Success<>(cards);
+        if (!cards.isEmpty()) {
+            String result = new Gson().toJson(cards);
+            return new Success<>(result);
+        }
         else return new Fail<>(EMPTY_PRODUCT_LIST_MESSAGE, REQUEST_ERROR_CODE);
     }
 
@@ -115,7 +139,7 @@ public class CardServiceImpl implements CardService {
         return number <= 0;
     }
 
-    private Result<Boolean> removeCardById(int id) {
+    private Result<String> removeCardById(int id) {
         if (isNumberNegativeOrZero(id)) return new Fail<>(String.format(NEGATIVE_ID_MESSAGE, id), REQUEST_ERROR_CODE);
         boolean result;
         try {
@@ -123,7 +147,18 @@ public class CardServiceImpl implements CardService {
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if (result) return new Success<>(true);
-        else return new Success<>(false);
+        return result ? new Success<>("Card has been deleted")
+                : new Success<>("Card with such id not found");
+    }
+
+    private Result<String> handleGetRequest(String data) {
+        if (Pattern.matches(PAGING_REGEX, data)) {
+            String[] params = data.split("&");
+            String lastIndex = params[0].split("=")[1];
+            String pageSize = params[1].split("=")[1];
+            return findAll(pageSize, lastIndex);
+        }else {
+            return getById(data.split("=")[1]);
+        }
     }
 }

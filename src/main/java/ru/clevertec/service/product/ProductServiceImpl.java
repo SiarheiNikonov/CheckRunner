@@ -1,14 +1,17 @@
 package ru.clevertec.service.product;
 
+import com.google.gson.Gson;
 import ru.clevertec.data.model.Product;
 import ru.clevertec.data.model.state.Fail;
 import ru.clevertec.data.model.state.Result;
 import ru.clevertec.data.model.state.Success;
 import ru.clevertec.data.repository.CrudRepository;
 import ru.clevertec.data.repository.productrepo.ProductRepository;
+import ru.clevertec.service.RequestMethod;
 import ru.clevertec.util.exceptions.RepositoryException;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -20,6 +23,7 @@ public class ProductServiceImpl implements ProductService {
     private static final String WRONG_PAGE_OR_LAST_ID_MESSAGE = "Wrong page size or last id format";
     private static final String NEGATIVE_PAGE_OR_LAST_ID_MESSAGE = "%s = %d is not valid (negative or zero)";
     private static final String EMPTY_PRODUCT_LIST_MESSAGE = "There are no products!";
+    private static final String PAGING_REGEX = "^last_index=[1-9]+\\d*&page_size=[1-9]+\\d*$";
     private static final int SERVER_ERROR_CODE = 500;
     private static final int REQUEST_ERROR_CODE = 400;
 
@@ -30,7 +34,27 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Result<Product> getById(String idText) {
+    public Result<String> handleRequest(String data, RequestMethod method) {
+        switch (method) {
+            case GET: {
+                return handleGetRequest(data);
+            }
+            case PUT: {
+                Product product = new Gson().fromJson(data, Product.class);
+                return update(product);
+            }
+            case POST: {
+                Product product = new Gson().fromJson(data, Product.class);
+                return add(product);
+            }
+            case DELETE: {
+                return removeById(data);
+            }
+        }
+        return new Fail<>("Unknown method", 400);
+    }
+
+    private Result<String> getById(String idText) {
         int id;
         try {
             id = Integer.parseInt(idText);
@@ -44,24 +68,25 @@ public class ProductServiceImpl implements ProductService {
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if (product == null) return new Fail<>(String.format(PRODUCT_WITH_ID_NOT_FOUND_MESSAGE, id), REQUEST_ERROR_CODE);
-        return new Success<>(product);
+        if (product == null)
+            return new Fail<>(String.format(PRODUCT_WITH_ID_NOT_FOUND_MESSAGE, id), REQUEST_ERROR_CODE);
+        String result = new Gson().toJson(product);
+        return new Success<>(result);
     }
 
-    @Override
-    public Result<Boolean> add(Product product) {
+    private Result<String> add(Product product) {
         Product result;
         try {
             result = repo.add(product);
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if (result != null) return new Success<>(true);
-        else return new Fail<>(String.format(UNSUCCESSFUL_OPERATION_MESSAGE, "adding", product.getId()), REQUEST_ERROR_CODE);
+        if (result != null) return new Success<>("Product has been saved");
+        else
+            return new Fail<>(String.format(UNSUCCESSFUL_OPERATION_MESSAGE, "adding", product.getId()), REQUEST_ERROR_CODE);
     }
 
-    @Override
-    public Result<Boolean> removeById(String idText) {
+    private Result<String> removeById(String idText) {
         int id;
         try {
             id = Integer.parseInt(idText);
@@ -71,21 +96,19 @@ public class ProductServiceImpl implements ProductService {
         return removeProductById(id);
     }
 
-    @Override
-    public Result<Boolean> update(Product product) {
+    private Result<String> update(Product product) {
         boolean result;
         try {
             result = repo.update(product);
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if (result) return new Success<>(true);
+        if (result) return new Success<>("Product has been updated");
         else
             return new Fail<>(String.format(UNSUCCESSFUL_OPERATION_MESSAGE, "updating", product.getId()), REQUEST_ERROR_CODE);
     }
 
-    @Override
-    public Result<List<Product>> findAll(String pageSizeText, String lastItemIdText) {
+    private Result<String> findAll(String pageSizeText, String lastItemIdText) {
         int pageSize;
         int lastItemId;
         try {
@@ -94,10 +117,10 @@ public class ProductServiceImpl implements ProductService {
         } catch (NumberFormatException e) {
             return new Fail<>(WRONG_PAGE_OR_LAST_ID_MESSAGE, REQUEST_ERROR_CODE);
         }
-        if(isNumberNegativeOrZero(pageSize)) {
+        if (isNumberNegativeOrZero(pageSize)) {
             return new Fail<>(String.format(NEGATIVE_PAGE_OR_LAST_ID_MESSAGE, "Page", pageSize), REQUEST_ERROR_CODE);
         }
-        if(isNumberNegativeOrZero(lastItemId)) {
+        if (isNumberNegativeOrZero(lastItemId)) {
             return new Fail<>(String.format(NEGATIVE_PAGE_OR_LAST_ID_MESSAGE, "Last item id", pageSize), REQUEST_ERROR_CODE);
         }
         List<Product> products;
@@ -106,11 +129,13 @@ public class ProductServiceImpl implements ProductService {
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if (!products.isEmpty()) return new Success<>(products);
-        else return new Fail<>(EMPTY_PRODUCT_LIST_MESSAGE, REQUEST_ERROR_CODE);
+        if (!products.isEmpty()) {
+            String result = new Gson().toJson(products);
+            return new Success<>(result);
+        } else return new Fail<>(EMPTY_PRODUCT_LIST_MESSAGE, REQUEST_ERROR_CODE);
     }
 
-    private Result<Boolean> removeProductById(int id){
+    private Result<String> removeProductById(int id) {
         if (isNumberNegativeOrZero(id)) return new Fail<>(String.format(NEGATIVE_ID_MESSAGE, id), REQUEST_ERROR_CODE);
         boolean result;
         try {
@@ -118,11 +143,25 @@ public class ProductServiceImpl implements ProductService {
         } catch (RepositoryException e) {
             return new Fail<>(PROBLEM_WITH_DB_MESSAGE, SERVER_ERROR_CODE);
         }
-        if (result) return new Success<>(true);
-        else return new Success<>(false);
+        return result
+                ? new Success<>("Product has been deleted")
+                : new Success<>("Product with such id not found");
     }
 
     private boolean isNumberNegativeOrZero(int number) {
         return number <= 0;
+    }
+
+
+
+    private Result<String> handleGetRequest(String data) {
+        if (Pattern.matches(PAGING_REGEX, data)) {
+            String[] params = data.split("&");
+            String lastIndex = params[0].split("=")[1];
+            String pageSize = params[1].split("=")[1];
+            return findAll(pageSize, lastIndex);
+        }else {
+            return getById(data.split("=")[1]);
+        }
     }
 }
