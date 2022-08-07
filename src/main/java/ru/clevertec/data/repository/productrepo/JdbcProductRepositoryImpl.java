@@ -7,10 +7,7 @@ import ru.clevertec.data.repository.companyrepo.CompanyRepo;
 import ru.clevertec.util.exceptions.RepositoryException;
 import ru.clevertec.util.jdbc.ConnectionPool;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,7 +123,7 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
 
     private Product addOrUpdate(Product product, boolean update) throws RepositoryException {
         try (Connection connection = connectionPool.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(update ? UPDATE_PRODUCT_QUERY : ADD_PRODUCT_QUERY);
+            PreparedStatement statement = connection.prepareStatement(update ? UPDATE_PRODUCT_QUERY : ADD_PRODUCT_QUERY, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, product.getTitle());
             statement.setInt(2, product.getPriceInCents());
             statement.setString(3, product.getDescription());
@@ -134,9 +131,11 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
             statement.setLong(5, product.getBarcode());
             statement.setBoolean(6, product.isOnSale());
             if (update) statement.setInt(7, product.getId());
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                int id = resultSet.getInt("product_id");
+            statement.executeUpdate();
+
+            ResultSet keys = statement.getGeneratedKeys();
+            if (keys.next()) {
+                int id = keys.getInt("product_id");
                 return new Product(
                         id,
                         product.getTitle(),
@@ -148,6 +147,7 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
                 );
             } else return null;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RepositoryException(e, "Something went wrong");
         }
     }

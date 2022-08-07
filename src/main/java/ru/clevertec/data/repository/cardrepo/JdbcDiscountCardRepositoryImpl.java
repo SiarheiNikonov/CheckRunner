@@ -5,10 +5,7 @@ import ru.clevertec.data.model.DiscountCardType;
 import ru.clevertec.util.exceptions.RepositoryException;
 import ru.clevertec.util.jdbc.ConnectionPool;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,9 +122,10 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
                 typeId = resultSet.getInt("type_id");
             } else return null;
             statement.close();
-            statement = conn.prepareStatement(ADD_CARD_QUERY);
+            statement = conn.prepareStatement(ADD_CARD_QUERY, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, typeId);
-            resultSet = statement.executeQuery();
+            statement.executeUpdate();
+            resultSet = statement.getGeneratedKeys();
             if(resultSet.next()) {
                 int id = resultSet.getInt("card_id");
                 statement.close();
