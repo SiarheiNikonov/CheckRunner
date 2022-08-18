@@ -13,15 +13,13 @@ import javax.servlet.annotation.WebListener;
 public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-
-        ApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(Config.class);
-        AppContextHolder.init(annotationConfigApplicationContext);
-
         try {
             DatabaseInitializer.main(null);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
+        ApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext(Config.class);
+        AppContextHolder.init(annotationConfigApplicationContext);
     }
 }

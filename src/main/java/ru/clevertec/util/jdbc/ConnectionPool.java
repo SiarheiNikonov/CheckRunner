@@ -1,7 +1,5 @@
 package ru.clevertec.util.jdbc;
 
-import org.springframework.stereotype.Component;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,13 +9,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class ConnectionPool implements ConnectionReleaser {
 
-    private static ConnectionPool instance;
     private final BlockingQueue<ReusableConnection> connectionPool;
     private final BlockingQueue<ReusableConnection> activeConnections;
-
-    public ConnectionPool() {
-        this(PropsKt.DEFAULT_POOL_SIZE);
-    }
 
     public ConnectionPool(int poolSize) {
         connectionPool = new LinkedBlockingQueue<>(poolSize);
@@ -63,7 +56,6 @@ public class ConnectionPool implements ConnectionReleaser {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
             connectionPool.offer((ReusableConnection) conn);
         }
     }
@@ -77,5 +69,4 @@ public class ConnectionPool implements ConnectionReleaser {
             }
         }
     }
-
 }
