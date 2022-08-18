@@ -1,5 +1,8 @@
 package ru.clevertec.data.repository.cardrepo;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import ru.clevertec.data.model.DiscountCard;
 import ru.clevertec.data.model.DiscountCardType;
 import ru.clevertec.util.exceptions.RepositoryException;
@@ -9,11 +12,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@AllArgsConstructor
 public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
     private final ConnectionPool pool;
 
     private static final int DEFAULT_PAGE_SIZE = 20;
-    private static volatile JdbcDiscountCardRepositoryImpl instance;
 
     private static final String GET_CARD_BY_ID_QUERY =
             "SELECT card_id, type_title FROM discount_cards  " +
@@ -41,10 +45,6 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
                     "WHERE card_id > ? " +
                     "ORDER BY discount_cards.card_id ASC " +
                     "LIMIT ?";
-
-    private JdbcDiscountCardRepositoryImpl(ConnectionPool connectionPool) {
-        pool = connectionPool;
-    }
 
     @Override
     public List<DiscountCard> findAll(Integer pageSize, long lastCardId) throws RepositoryException {
@@ -133,14 +133,5 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
         } catch (SQLException e) {
             throw new RepositoryException(e, "Something went wrong");
         }
-    }
-
-    public static JdbcDiscountCardRepositoryImpl getInstance(ConnectionPool pool) {
-        if (instance == null)
-            synchronized (JdbcDiscountCardRepositoryImpl.class) {
-                if (instance == null)
-                    instance = new JdbcDiscountCardRepositoryImpl(pool);
-            }
-        return instance;
     }
 }

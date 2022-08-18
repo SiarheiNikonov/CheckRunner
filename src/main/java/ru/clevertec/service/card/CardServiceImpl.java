@@ -1,10 +1,12 @@
 package ru.clevertec.service.card;
 
 import com.google.gson.Gson;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.clevertec.data.model.DiscountCard;
-import ru.clevertec.data.model.state.Fail;
-import ru.clevertec.data.model.state.Result;
-import ru.clevertec.data.model.state.Success;
+import ru.clevertec.service.model.state.Fail;
+import ru.clevertec.service.model.state.Result;
+import ru.clevertec.service.model.state.Success;
 import ru.clevertec.data.repository.CrudRepository;
 import ru.clevertec.data.repository.cardrepo.DiscountCardRepository;
 import ru.clevertec.service.RequestMethod;
@@ -13,6 +15,8 @@ import ru.clevertec.util.exceptions.RepositoryException;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Service
+@AllArgsConstructor
 public class CardServiceImpl implements CardService {
 
     private static final String PAGING_REGEX = "^last_index=[1-9]+\\d*&page_size=[1-9]+\\d*$";
@@ -28,9 +32,7 @@ public class CardServiceImpl implements CardService {
     private static final int REQUEST_ERROR_CODE = 400;
     private final CrudRepository<DiscountCard> repo;
 
-    public CardServiceImpl(DiscountCardRepository repo) {
-        this.repo = repo;
-    }
+
 
     @Override
     public Result<String> handleRequest(String data, RequestMethod method) {

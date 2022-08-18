@@ -1,4 +1,4 @@
-package ru.clevertec.data.model.state;
+package ru.clevertec.service.model.state;
 
 public class Fail<T> implements Result<T> {
 

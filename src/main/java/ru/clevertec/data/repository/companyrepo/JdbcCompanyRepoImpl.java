@@ -1,5 +1,7 @@
 package ru.clevertec.data.repository.companyrepo;
 
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 import ru.clevertec.data.model.Company;
 import ru.clevertec.util.jdbc.ConnectionPool;
 
@@ -8,9 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Repository
+@AllArgsConstructor
 public class JdbcCompanyRepoImpl implements CompanyRepo {
 
-    private static volatile JdbcCompanyRepoImpl instance;
     private final ConnectionPool connectionPool;
 
     private static final String ADD_COMPANY_QUERY =
@@ -18,10 +21,6 @@ public class JdbcCompanyRepoImpl implements CompanyRepo {
                     "VALUES (?, ?, ?)";
 
     private static final String GET_COMPANY_BY_ID_QUERY = "SELECT * FROM company WHERE company_id = ?";
-
-    private  JdbcCompanyRepoImpl(ConnectionPool connectionPool) {
-        this.connectionPool = connectionPool;
-    }
 
     @Override
     public boolean addCompany(Company company) {
@@ -53,15 +52,4 @@ public class JdbcCompanyRepoImpl implements CompanyRepo {
             return null;
         }
     }
-
-    public static JdbcCompanyRepoImpl getInstance(ConnectionPool connectionPool) {
-        if (instance == null)
-            synchronized (JdbcCompanyRepoImpl.class) {
-                if (instance == null) {
-                    instance = new JdbcCompanyRepoImpl(connectionPool);
-                }
-            }
-        return instance;
-    }
-
 }

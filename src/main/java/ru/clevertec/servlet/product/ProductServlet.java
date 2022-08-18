@@ -1,13 +1,13 @@
 package ru.clevertec.servlet.product;
 
-import ru.clevertec.data.model.state.Fail;
-import ru.clevertec.data.model.state.Result;
-import ru.clevertec.data.model.state.Success;
+import ru.clevertec.AppContextHolder;
 import ru.clevertec.service.RequestMethod;
+import ru.clevertec.service.model.state.Fail;
+import ru.clevertec.service.model.state.Result;
+import ru.clevertec.service.model.state.Success;
 import ru.clevertec.service.product.ProductService;
-import ru.clevertec.util.ServiceLocator;
-import ru.clevertec.util.exceptions.RepositoryInitializationException;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,11 +19,11 @@ import java.io.Writer;
 @WebServlet("/products")
 public class ProductServlet extends HttpServlet {
 
-    private final ProductService service = (ProductService) ServiceLocator
-            .getInstance()
-            .getDependency(ProductService.class);
+    private ProductService service;
 
-    public ProductServlet() throws RepositoryInitializationException {
+    @Override
+    public void init() throws ServletException {
+        service = AppContextHolder.getInstance().getContext().getBean(ProductService.class);
     }
 
     @Override

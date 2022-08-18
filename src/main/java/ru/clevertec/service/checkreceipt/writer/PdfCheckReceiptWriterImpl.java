@@ -4,6 +4,7 @@ package ru.clevertec.service.checkreceipt.writer;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import kotlin.Pair;
+import org.springframework.stereotype.Component;
 import ru.clevertec.data.model.CheckReceipt;
 import ru.clevertec.data.model.CheckReceiptItem;
 
@@ -12,7 +13,7 @@ import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
 
-
+@Component
 public class PdfCheckReceiptWriterImpl implements CheckReceiptWriter {
 
     private static final String FONT = "fonts/arial.ttf";

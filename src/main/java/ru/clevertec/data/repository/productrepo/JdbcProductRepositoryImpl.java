@@ -1,5 +1,7 @@
 package ru.clevertec.data.repository.productrepo;
 
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 import ru.clevertec.data.model.Company;
 import ru.clevertec.data.model.Product;
 import ru.clevertec.data.repository.cardrepo.JdbcDiscountCardRepositoryImpl;
@@ -11,11 +13,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
+@AllArgsConstructor
 public class JdbcProductRepositoryImpl implements ProductRepository {
 
     private final ConnectionPool connectionPool;
     private final CompanyRepo companyRepo;
-    private static volatile JdbcProductRepositoryImpl instance;
     private static final int DEFAULT_PAGE_SIZE = 20;
 
     private static final String GET_PRODUCT_BY_ID_QUERY =
@@ -23,7 +26,8 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
                     "FROM product  " +
                     "WHERE product_id =?";
 
-    private static final String ADD_PRODUCT_QUERY = "INSERT INTO product (title, price_in_cent, description, company_id_ref, barcode, on_sale)\n " +
+    private static final String ADD_PRODUCT_QUERY =
+            "INSERT INTO product (title, price_in_cent, description, company_id_ref, barcode, on_sale)\n " +
             "VALUES (?, ?, ?, ?, ?, ?)";
     private static final String REMOVE_PRODUCT_BY_ID_QUERY = "DELETE FROM product WHERE product_id = ?";
     private static final String UPDATE_PRODUCT_QUERY =
@@ -38,11 +42,6 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
                     "ORDER BY product_id " +
                     "LIMIT ?";
 
-
-    public JdbcProductRepositoryImpl(ConnectionPool connectionPool, CompanyRepo companyRepo) {
-        this.connectionPool = connectionPool;
-        this.companyRepo = companyRepo;
-    }
 
     @Override
     public List<Product> findAll(Integer pageSize, long lastItemId) throws RepositoryException {
@@ -151,14 +150,4 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
             throw new RepositoryException(e, "Something went wrong");
         }
     }
-
-    public static JdbcProductRepositoryImpl getInstance(ConnectionPool pool, CompanyRepo companyRepo) {
-        if (instance == null)
-            synchronized (JdbcDiscountCardRepositoryImpl.class) {
-                if (instance == null)
-                    instance = new JdbcProductRepositoryImpl(pool, companyRepo);
-            }
-        return instance;
-    }
-
 }

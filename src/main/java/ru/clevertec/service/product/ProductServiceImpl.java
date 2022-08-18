@@ -1,10 +1,12 @@
 package ru.clevertec.service.product;
 
 import com.google.gson.Gson;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.clevertec.data.model.Product;
-import ru.clevertec.data.model.state.Fail;
-import ru.clevertec.data.model.state.Result;
-import ru.clevertec.data.model.state.Success;
+import ru.clevertec.service.model.state.Fail;
+import ru.clevertec.service.model.state.Result;
+import ru.clevertec.service.model.state.Success;
 import ru.clevertec.data.repository.CrudRepository;
 import ru.clevertec.data.repository.productrepo.ProductRepository;
 import ru.clevertec.service.RequestMethod;
@@ -13,6 +15,8 @@ import ru.clevertec.util.exceptions.RepositoryException;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Service
+@AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private static final String PROBLEM_WITH_DB_MESSAGE = "Problem with db has occurred";
@@ -28,10 +32,6 @@ public class ProductServiceImpl implements ProductService {
     private static final int REQUEST_ERROR_CODE = 400;
 
     private final CrudRepository<Product> repo;
-
-    public ProductServiceImpl(ProductRepository repo) {
-        this.repo = repo;
-    }
 
     @Override
     public Result<String> handleRequest(String data, RequestMethod method) {

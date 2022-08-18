@@ -2,12 +2,14 @@ package ru.clevertec.service.checkreceipt;
 
 import com.itextpdf.text.DocumentException;
 import kotlin.Pair;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.clevertec.data.model.CheckReceipt;
 import ru.clevertec.data.model.DiscountCard;
 import ru.clevertec.data.model.Product;
-import ru.clevertec.data.model.state.Fail;
-import ru.clevertec.data.model.state.Result;
-import ru.clevertec.data.model.state.Success;
+import ru.clevertec.service.model.state.Fail;
+import ru.clevertec.service.model.state.Result;
+import ru.clevertec.service.model.state.Success;
 import ru.clevertec.data.repository.cardrepo.DiscountCardRepository;
 import ru.clevertec.data.repository.productrepo.ProductRepository;
 import ru.clevertec.service.checkreceipt.calculator.CheckReceiptCalculator;
@@ -20,24 +22,14 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
+@Service
+@AllArgsConstructor
 public class CheckReceiptServiceImpl implements CheckReceiptService {
 
     private final DiscountCardRepository cardRepo;
     private final ProductRepository productRepo;
     private final CheckReceiptCalculator calculator;
     private final CheckReceiptWriter writer;
-
-    public CheckReceiptServiceImpl(
-            DiscountCardRepository cardRepo,
-            ProductRepository productRepo,
-            CheckReceiptCalculator calculator,
-            CheckReceiptWriter writer
-    ) {
-        this.cardRepo = cardRepo;
-        this.productRepo = productRepo;
-        this.calculator = calculator;
-        this.writer = writer;
-    }
 
     @Override
     public Result<Boolean> handleRequest(String query, OutputStream outputStream) {

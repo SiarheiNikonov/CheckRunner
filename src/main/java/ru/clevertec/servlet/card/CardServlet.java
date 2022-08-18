@@ -1,13 +1,13 @@
 package ru.clevertec.servlet.card;
 
-import ru.clevertec.data.model.state.Fail;
-import ru.clevertec.data.model.state.Result;
-import ru.clevertec.data.model.state.Success;
+import ru.clevertec.AppContextHolder;
 import ru.clevertec.service.RequestMethod;
 import ru.clevertec.service.card.CardService;
-import ru.clevertec.util.ServiceLocator;
-import ru.clevertec.util.exceptions.RepositoryInitializationException;
+import ru.clevertec.service.model.state.Fail;
+import ru.clevertec.service.model.state.Result;
+import ru.clevertec.service.model.state.Success;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,12 +19,11 @@ import java.io.Writer;
 @WebServlet("/cards")
 public class CardServlet extends HttpServlet {
 
+    private CardService service;
 
-    private final CardService service = (CardService) ServiceLocator
-            .getInstance()
-            .getDependency(CardService.class);
-
-    public CardServlet() throws RepositoryInitializationException {
+    @Override
+    public void init() throws ServletException {
+        service = AppContextHolder.getInstance().getContext().getBean(CardService.class);
     }
 
     @Override

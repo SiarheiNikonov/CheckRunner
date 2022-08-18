@@ -1,4 +1,4 @@
-package ru.clevertec.data.model.state;
+package ru.clevertec.service.model.state;
 
 public class Success<T> implements Result<T>{
     private final T data;

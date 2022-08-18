@@ -1,6 +1,7 @@
 package ru.clevertec.service.checkreceipt.calculator;
 
 import kotlin.Pair;
+import org.springframework.stereotype.Component;
 import ru.clevertec.data.model.CheckReceipt;
 import ru.clevertec.data.model.CheckReceiptItem;
 import ru.clevertec.data.model.DiscountCard;
@@ -8,6 +9,7 @@ import ru.clevertec.data.model.Product;
 
 import java.util.*;
 
+@Component
 public class CheckReceiptCalculatorImpl implements CheckReceiptCalculator {
     @Override
     public CheckReceipt calculateCheckReceipt(Map<Product, Integer> order, DiscountCard card) {
@@ -54,6 +56,4 @@ public class CheckReceiptCalculatorImpl implements CheckReceiptCalculator {
 
         return new CheckReceipt(header, items, footer);
     }
-
-
 }

@@ -29,6 +29,7 @@ dependencies {
     implementation liquibase
     implementation snakeyaml
     implementation servlet
+    implementation spring
     compileOnly lombok
     annotationProcessor lombok
     testImplementation junit.values()

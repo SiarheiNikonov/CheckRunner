@@ -1,11 +1,11 @@
 package ru.clevertec.servlet.checkreceipt;
 
-import ru.clevertec.data.model.state.Fail;
-import ru.clevertec.data.model.state.Result;
+import ru.clevertec.AppContextHolder;
 import ru.clevertec.service.checkreceipt.CheckReceiptService;
-import ru.clevertec.util.ServiceLocator;
-import ru.clevertec.util.exceptions.RepositoryInitializationException;
+import ru.clevertec.service.model.state.Fail;
+import ru.clevertec.service.model.state.Result;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,11 +15,11 @@ import java.io.IOException;
 @WebServlet("/receipt")
 public class CheckReceiptServlet extends HttpServlet {
 
-    private final CheckReceiptService service = (CheckReceiptService) ServiceLocator
-            .getInstance()
-            .getDependency(CheckReceiptService.class);
+    private CheckReceiptService service;
 
-    public CheckReceiptServlet() throws RepositoryInitializationException {
+    @Override
+    public void init() throws ServletException {
+        service = AppContextHolder.getInstance().getContext().getBean(CheckReceiptService.class);
     }
 
     @Override

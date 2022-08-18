@@ -1,6 +1,6 @@
 package ru.clevertec.service;
 
-import ru.clevertec.data.model.state.Result;
+import ru.clevertec.service.model.state.Result;
 
 public interface Service{
 
