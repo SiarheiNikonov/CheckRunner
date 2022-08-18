@@ -152,9 +152,6 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
         }
     }
 
-    // Не знаю правильно ли в одну репу пихать другую (используется для получения компании, используемой для создания объекта).
-    // Или нужно было тянуть данные из SQL и самому создавать объект Company?
-    // Пусть будет.
     public static JdbcProductRepositoryImpl getInstance(ConnectionPool pool, CompanyRepo companyRepo) {
         if (instance == null)
             synchronized (JdbcDiscountCardRepositoryImpl.class) {

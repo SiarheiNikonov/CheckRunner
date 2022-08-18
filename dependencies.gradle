@@ -1,0 +1,25 @@
+ext {
+    versions = [
+            gson      : "2.9.0",
+            log4j     : "2.18.0",
+            postgresql: "42.4.0",
+            itextpdf  : "5.5.13.3",
+            liquibase : "4.14.0",
+            snakeyaml : "1.30",
+            junit     : "5.9.0",
+            servlet   : "4.0.1",
+            lombok    : "1.18.24"
+    ]
+
+    gson = "com.google.code.gson:gson:${versions.gson}"
+    log4j = ["api" : "org.apache.logging.log4j:log4j-api:${versions.log4j}",
+             "core": "org.apache.logging.log4j:log4j-core:${versions.log4j}"]
+    postgresql = "org.postgresql:postgresql:${versions.postgresql}"
+    itextpdf = "com.itextpdf:itextpdf:${versions.itextpdf}"
+    liquibase = "org.liquibase:liquibase-core:${versions.liquibase}"
+    snakeyaml = "org.yaml:snakeyaml:${versions.snakeyaml}"
+    junit = ["engine": "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
+    "params": "org.junit.jupiter:junit-jupiter-params:${versions.junit}"]
+    servlet = "javax.servlet:javax.servlet-api:${versions.servlet}"
+    lombok = "org.projectlombok:lombok:${versions.lombok}"
+}

@@ -46,27 +46,6 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
         pool = connectionPool;
     }
 
-
-    // Можно было перегрузить метод с параметром pageSize и без
-    // Можно было вторым параметром передавать не индекс последней карты, а номер страницы,
-    // а в запросе ставить OFFSET = pageSize * (pageNumber - 1), но...
-    // Нагуглил, что такой способ на больших данных очень медленный.
-    //
-    // SELECT * FROM messages ORDER BY id ASC LIMIT 100 OFFSET 100000;
-    // Limit  (cost=3432.12..3435.56 rows=100 width=37) (actual time=1377.502..1379.512 rows=100 loops=1)
-    //   ->  Index Scan using messages_pkey on messages  (cost=0.42..34317.43 rows=1000000 width=37) (actual time=0.046..712.494 rows=100100 loops=1)
-    // Planning Time: 0.127 ms
-    // Execution Time: 1380.311 ms
-    //
-    //SELECT * FROM messages WHERE id > 100000 ORDER BY id ASC LIMIT 100;
-    // Limit  (cost=0.42..4.11 rows=100 width=37) (actual time=0.090..2.790 rows=100 loops=1)
-    //   ->  Index Scan using messages_pkey on messages  (cost=0.42..33203.93 rows=901743 width=37) (actual time=0.076..1.085 rows=100 loops=1)
-    //         Index Cond: (id > 100000)
-    // Planning Time: 0.076 ms
-    // Execution Time: 3.723 ms
-    //
-    // Разница в 370 раз.
-    // И не надо на меня ругаться за комменты в коде :)
     @Override
     public List<DiscountCard> findAll(Integer pageSize, long lastCardId) throws RepositoryException {
         try (Connection conn = pool.getConnection()) {
