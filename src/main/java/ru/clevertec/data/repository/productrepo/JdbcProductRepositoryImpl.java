@@ -1,10 +1,9 @@
 package ru.clevertec.data.repository.productrepo;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.data.model.Company;
 import ru.clevertec.data.model.Product;
-import ru.clevertec.data.repository.cardrepo.JdbcDiscountCardRepositoryImpl;
 import ru.clevertec.data.repository.companyrepo.CompanyRepo;
 import ru.clevertec.util.exceptions.RepositoryException;
 import ru.clevertec.util.jdbc.ConnectionPool;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JdbcProductRepositoryImpl implements ProductRepository {
 
     private final ConnectionPool connectionPool;

@@ -3,6 +3,7 @@ package ru.clevertec.service.checkreceipt;
 import com.itextpdf.text.DocumentException;
 import kotlin.Pair;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.clevertec.data.model.CheckReceipt;
 import ru.clevertec.data.model.DiscountCard;
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CheckReceiptServiceImpl implements CheckReceiptService {
 
     private final DiscountCardRepository cardRepo;

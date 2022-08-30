@@ -2,6 +2,7 @@ package ru.clevertec.service.card;
 
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.clevertec.data.model.DiscountCard;
 import ru.clevertec.service.model.state.Fail;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
 
     private static final String PAGING_REGEX = "^last_index=[1-9]+\\d*&page_size=[1-9]+\\d*$";

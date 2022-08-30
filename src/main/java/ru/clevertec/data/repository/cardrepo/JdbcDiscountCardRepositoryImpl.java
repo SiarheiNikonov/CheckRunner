@@ -1,6 +1,5 @@
 package ru.clevertec.data.repository.cardrepo;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.data.model.DiscountCard;
@@ -13,10 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
     private final ConnectionPool pool;
-
     private static final int DEFAULT_PAGE_SIZE = 20;
 
     private static final String GET_CARD_BY_ID_QUERY =

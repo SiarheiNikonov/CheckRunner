@@ -1,6 +1,6 @@
 package ru.clevertec.data.repository.companyrepo;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.clevertec.data.model.Company;
 import ru.clevertec.util.jdbc.ConnectionPool;
@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Repository
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JdbcCompanyRepoImpl implements CompanyRepo {
 
     private final ConnectionPool connectionPool;

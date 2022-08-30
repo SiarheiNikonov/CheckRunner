@@ -2,6 +2,7 @@ package ru.clevertec.service.product;
 
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.clevertec.data.model.Product;
 import ru.clevertec.service.model.state.Fail;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private static final String PROBLEM_WITH_DB_MESSAGE = "Problem with db has occurred";
