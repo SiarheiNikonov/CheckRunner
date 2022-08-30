@@ -1,16 +1,14 @@
 package ru.clevertec.data.model;
 
-public enum DiscountCardType {
-    WOODEN(1),
-    SILVER(3),
-    GOLD(5),
-    PLATINUM(10);
-    private final int discount;
-    DiscountCardType(int discount) {
-        this.discount = discount;
-    }
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    public int getDiscount() {
-        return discount;
-    }
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class DiscountCardType {
+    Integer typeId;
+    String typeTitle;
+    Integer discount;
 }

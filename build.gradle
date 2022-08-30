@@ -22,18 +22,21 @@ repositories {
 
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation gson
-    implementation log4j.values()
-    implementation postgresql
-    implementation itextpdf
-    implementation liquibase
-    implementation snakeyaml
-    implementation servlet
-    implementation spring
-    compileOnly lombok
-    annotationProcessor lombok
-    testImplementation junit.values()
+    implementation "com.google.code.gson:gson:${versions.gson}"
+    implementation "org.apache.logging.log4j:log4j-api:${versions.log4j}"
+    implementation "org.apache.logging.log4j:log4j-core:${versions.log4j}"
+    implementation "org.postgresql:postgresql:${versions.postgresql}"
+    implementation "com.itextpdf:itextpdf:${versions.itextpdf}"
+    implementation "org.liquibase:liquibase-core:${versions.liquibase}"
+    implementation "org.yaml:snakeyaml:${versions.snakeyaml}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:${versions.junit}"
+    implementation "javax.servlet:javax.servlet-api:${versions.servlet}"
+    compileOnly "org.projectlombok:lombok:${versions.lombok}"
+    annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+    implementation "org.springframework:spring-context:${versions.spring}"
 }
+
 compileKotlin {
     kotlinOptions {
         jvmTarget = "1.8"

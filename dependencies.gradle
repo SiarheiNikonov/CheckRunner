@@ -12,16 +12,4 @@ ext {
             spring: "5.3.21"
     ]
 
-    gson = "com.google.code.gson:gson:${versions.gson}"
-    log4j = ["api" : "org.apache.logging.log4j:log4j-api:${versions.log4j}",
-             "core": "org.apache.logging.log4j:log4j-core:${versions.log4j}"]
-    postgresql = "org.postgresql:postgresql:${versions.postgresql}"
-    itextpdf = "com.itextpdf:itextpdf:${versions.itextpdf}"
-    liquibase = "org.liquibase:liquibase-core:${versions.liquibase}"
-    snakeyaml = "org.yaml:snakeyaml:${versions.snakeyaml}"
-    junit = ["engine": "org.junit.jupiter:junit-jupiter-engine:${versions.junit}",
-    "params": "org.junit.jupiter:junit-jupiter-params:${versions.junit}"]
-    servlet = "javax.servlet:javax.servlet-api:${versions.servlet}"
-    lombok = "org.projectlombok:lombok:${versions.lombok}"
-    spring = "org.springframework:spring-context:${versions.spring}"
 }

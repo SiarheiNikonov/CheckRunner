@@ -20,7 +20,7 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
     private static final int DEFAULT_PAGE_SIZE = 20;
 
     private static final String GET_CARD_BY_ID_QUERY =
-            "SELECT card_id, type_title FROM discount_cards  " +
+            "SELECT card_id, discount_card_types.type_title, discount_card_types.type_id, discount_card_types.discount_percent FROM discount_cards  " +
                     "JOIN discount_card_types ON discount_cards.card_type = discount_card_types.type_id " +
                     "WHERE card_id =?";
 
@@ -39,7 +39,7 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
                     "WHERE card_id = ?";
 
     private static final String FIND_ALL_WITH_PAGING_QUERY =
-            "SELECT discount_cards.card_id, discount_card_types.type_title " +
+            "SELECT discount_cards.card_id, discount_card_types.type_title, discount_card_types.type_id, discount_card_types.discount_percent " +
                     "FROM discount_cards " +
                     "JOIN discount_card_types ON discount_card_types.type_id = discount_cards.card_type " +
                     "WHERE card_id > ? " +
@@ -55,7 +55,12 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
             ResultSet resultSet = statement.executeQuery();
             List<DiscountCard> cards = new ArrayList<>(pageSize == null ? DEFAULT_PAGE_SIZE : pageSize);
             while (resultSet.next()) {
-                cards.add(new DiscountCard(resultSet.getInt(1), DiscountCardType.valueOf(resultSet.getString(2))));
+                DiscountCardType type = new DiscountCardType(
+                        resultSet.getInt(3),
+                        resultSet.getString(2),
+                        resultSet.getInt(4)
+                );
+                cards.add(new DiscountCard(resultSet.getInt(1),type ));
             }
             statement.close();
             return cards;
@@ -81,7 +86,7 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
         try (Connection conn = pool.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(UPDATE_CARD_TYPE_BY_ID_QUERY);
             statement.setInt(2, product.getId());
-            statement.setString(1, product.getCardType().name());
+            statement.setString(1, product.getCardType().getTypeTitle());
             int changedRows = statement.executeUpdate();
             statement.close();
             return changedRows == 1;
@@ -94,7 +99,7 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
     public DiscountCard add(DiscountCard card) throws RepositoryException {
         try (Connection conn = pool.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(GET_DISCOUNT_CARD_TYPE_ID_BY_TITLE_QUERY);
-            statement.setString(1, card.getCardType().name());
+            statement.setString(1, card.getCardType().getTypeTitle());
             ResultSet resultSet = statement.executeQuery();
             int typeId;
             if (resultSet.next()) {
@@ -120,12 +125,16 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
         try (Connection conn = pool.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(GET_CARD_BY_ID_QUERY);
             statement.setInt(1, id);
-            ResultSet result = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             DiscountCard discountCard = null;
-            if (result.next()) {
-                String cardTypeTitle = result.getString(2);
-                DiscountCardType cardType = DiscountCardType.valueOf(cardTypeTitle);
-                int cardId = result.getInt(1);
+            if (resultSet.next()) {
+                String cardTypeTitle = resultSet.getString(2);
+                DiscountCardType cardType = new DiscountCardType(
+                        resultSet.getInt(3),
+                        resultSet.getString(2),
+                        resultSet.getInt(4)
+                );
+                int cardId = resultSet.getInt(1);
                 discountCard = new DiscountCard(cardId, cardType);
                 statement.close();
             }
