@@ -1,0 +1,15 @@
+ext {
+    versions = [
+            gson      : "2.9.0",
+            log4j     : "2.18.0",
+            postgresql: "42.4.0",
+            itextpdf  : "5.5.13.3",
+            liquibase : "4.14.0",
+            snakeyaml : "1.30",
+            junit     : "5.9.0",
+            servlet   : "4.0.1",
+            lombok    : "1.18.24",
+            spring: "5.3.21"
+    ]
+
+}

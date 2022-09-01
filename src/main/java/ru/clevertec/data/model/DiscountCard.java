@@ -1,19 +1,11 @@
 package ru.clevertec.data.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Value;
+
+@Value
+@AllArgsConstructor
 public class DiscountCard {
-    private int id;
-    private DiscountCardType cardType;
-
-    public DiscountCard(int id,DiscountCardType cardType) {
-        this.id = id;
-        this.cardType = cardType;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public DiscountCardType getCardType() {
-        return cardType;
-    }
+    Integer id;
+    DiscountCardType cardType;
 }
