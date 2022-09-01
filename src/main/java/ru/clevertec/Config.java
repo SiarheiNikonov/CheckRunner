@@ -74,15 +74,5 @@ public class Config {
     @Bean
     public EntityManagerFactory entityManagerFactory(@Autowired SessionFactory sessionFactory) {
         return sessionFactory;
-//        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-//        vendorAdapter.setGenerateDdl(Boolean.TRUE);
-//        vendorAdapter.setShowSql(Boolean.TRUE);
-//        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-//        factory.setJpaVendorAdapter(vendorAdapter);
-//        factory.setPackagesToScan("ru.clevertec.data.model");
-//        factory.setDataSource(dataSource());
-//        factory.afterPropertiesSet();
-//        factory.setLoadTimeWeaver(new InstrumentationLoadTimeWeaver());
-//        return factory.getObject();
     }
 }
