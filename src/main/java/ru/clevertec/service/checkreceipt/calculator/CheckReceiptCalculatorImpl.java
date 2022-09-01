@@ -12,7 +12,7 @@ import java.util.*;
 @Component
 public class CheckReceiptCalculatorImpl implements CheckReceiptCalculator {
     @Override
-    public CheckReceipt calculateCheckReceipt(Map<Product, Integer> order, DiscountCard card) {
+    public CheckReceipt calculateCheckReceipt(Map<Product, Long> order, DiscountCard card) {
         List<String> header = new LinkedList<>();
         header.add("CASH RECEIPT");
         header.add("SOME USELESS INFO");
@@ -24,7 +24,7 @@ public class CheckReceiptCalculatorImpl implements CheckReceiptCalculator {
         long cardDiscount = 0;
         long discount;
 
-        for (Map.Entry<Product, Integer> entry : order.entrySet()) {
+        for (Map.Entry<Product, Long> entry : order.entrySet()) {
             discount = 0;
             Product product = entry.getKey();
             long price = product.getPriceInCents();

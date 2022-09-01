@@ -38,9 +38,9 @@ public class CheckReceiptServiceImpl implements CheckReceiptService {
             return new Fail<>("Check query! Must be some like 1=1&3=2&card_id=7", 400);
 
         AtomicBoolean isRepositoryException = new AtomicBoolean(false);
-        List<Integer> notFoundProductsId = new ArrayList<>();
+        List<Long> notFoundProductsId = new ArrayList<>();
         DiscountCard card = null;
-        Map<Product, Integer> order = new HashMap<>();
+        Map<Product, Long> order = new HashMap<>();
         String[] params = query.split("&");
         int paramsSize = params.length;
         String lastParam = params[paramsSize - 1];
@@ -55,12 +55,12 @@ public class CheckReceiptServiceImpl implements CheckReceiptService {
         }
         Arrays.stream(params, 0, paramsSize).forEach(param -> {
             try {
-                Pair<Product, Integer> productWithCountOrNullWithId = mapPositionParam(param);
+                Pair<Product, Long> productWithCountOrNullWithId = mapPositionParam(param);
                 Product product = productWithCountOrNullWithId.getFirst();
                 if (product == null) notFoundProductsId.add(productWithCountOrNullWithId.getSecond());
                 else {
-                    Integer currentCount = order.get(productWithCountOrNullWithId.getFirst());
-                    Integer count = currentCount == null
+                    Long currentCount = order.get(productWithCountOrNullWithId.getFirst());
+                    Long count = currentCount == null
                             ? productWithCountOrNullWithId.getSecond()
                             : currentCount + productWithCountOrNullWithId.getSecond();
                     order.put(productWithCountOrNullWithId.getFirst(), count);
@@ -103,14 +103,14 @@ public class CheckReceiptServiceImpl implements CheckReceiptService {
     private DiscountCard getCard(String cardInfo) throws RepositoryException {
 
         String cardIdText = cardInfo.split("=")[1];
-        int cardId = Integer.parseInt(cardIdText);
+        long cardId = Long.parseLong(cardIdText);
         return cardRepo.getById(cardId);
     }
 
-    private Pair<Product, Integer> mapPositionParam(String query) throws RepositoryException {
+    private Pair<Product, Long> mapPositionParam(String query) throws RepositoryException {
         String[] params = query.split("=");
-        int productId = Integer.parseInt(params[0]);
-        int count = Integer.parseInt(params[1]);
+        long productId = Long.parseLong(params[0]);
+        long count = Long.parseLong(params[1]);
         Product product = productRepo.getById(productId);
         if (product == null) return new Pair<>(null, productId);
         return new Pair<>(product, count);

@@ -6,4 +6,7 @@ public class RepositoryException extends IOException {
     public RepositoryException(Throwable e, String message) {
         super(message, e);
     }
+    public RepositoryException(String message) {
+        super(message);
+    }
 }

@@ -1,3 +1,12 @@
-При развертывании приложения ContextListener инициализирует БД, инициализирует AppContextHolder, в котором лежит спринговый контехт.
+### Репозиторий с картами работает на SessionFactory, Session и тд 
 
-Т.к. сервлеты создаются контейнером, зависимости сервлетов приходится получать костылями через context.getBean(..)
+### Репозиторий продуктов построен на JpaRepository
+
+### И в Product, и в DiscountCard есть ассоциация @ManyToOne
+
+### Дабы не ломать архитектуру на интерфейсах, JpaRepository<Product, Long> был прикручен через адаптер, реализующий ProductRepository
+
+### Пришлось перелопатить проект и поменять Integer на Long, т.к. в HibernateCardRepository.findAll вылетал ClassCastException
+
+### С методами с пагинацией задолбался :)
+ 

@@ -32,9 +32,13 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
     testImplementation "org.junit.jupiter:junit-jupiter-params:${versions.junit}"
     implementation "javax.servlet:javax.servlet-api:${versions.servlet}"
+
     compileOnly "org.projectlombok:lombok:${versions.lombok}"
     annotationProcessor "org.projectlombok:lombok:${versions.lombok}"
+
     implementation "org.springframework:spring-context:${versions.spring}"
+    implementation "org.springframework.data:spring-data-jpa:${versions.springdata}"
+    implementation "org.hibernate:hibernate-core:${versions.hibernatecore}"
 }
 
 compileKotlin {

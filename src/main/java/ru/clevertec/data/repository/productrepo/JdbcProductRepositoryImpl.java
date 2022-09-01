@@ -12,7 +12,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
 @RequiredArgsConstructor
 public class JdbcProductRepositoryImpl implements ProductRepository {
 
@@ -21,24 +20,24 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
     private static final int DEFAULT_PAGE_SIZE = 20;
 
     private static final String GET_PRODUCT_BY_ID_QUERY =
-            "SELECT product_id, title, price_in_cent, description, barcode, on_sale, company_id_ref " +
+            "SELECT id, title, price_in_cent, description, barcode, on_sale, company_id_ref " +
                     "FROM product  " +
-                    "WHERE product_id =?";
+                    "WHERE id =?";
 
     private static final String ADD_PRODUCT_QUERY =
             "INSERT INTO product (title, price_in_cent, description, company_id_ref, barcode, on_sale)\n " +
             "VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String REMOVE_PRODUCT_BY_ID_QUERY = "DELETE FROM product WHERE product_id = ?";
+    private static final String REMOVE_PRODUCT_BY_ID_QUERY = "DELETE FROM product WHERE id = ?";
     private static final String UPDATE_PRODUCT_QUERY =
             "UPDATE product " +
                     "SET title = ?, price_in_cent = ?, description = ?, company_id_ref = ?, barcode = ?, on_sale = ? " +
-                    "WHERE product_id = ?";
+                    "WHERE id = ?";
 
     private static final String FIND_ALL_WITH_PAGING_QUERY =
-            "SELECT product_id, title, price_in_cent, description, barcode, on_sale, company_id, company_name, company_address, company_tel_number " +
+            "SELECT id, title, price_in_cent, description, barcode, on_sale, company_id, company_name, company_address, company_tel_number " +
                     "FROM product JOIN company ON product.company_id_ref = company.company_id " +
-                    "WHERE product_id > ? " +
-                    "ORDER BY product_id " +
+                    "WHERE id > ? " +
+                    "ORDER BY id " +
                     "LIMIT ?";
 
 
@@ -52,7 +51,7 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
             List<Product> products = new ArrayList<>(limit);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                int productId = resultSet.getInt("product_id");
+                long productId = resultSet.getLong("id");
                 String title = resultSet.getString("title");
                 int priceInCents = resultSet.getInt("price_in_cent");
                 String description = resultSet.getString("description");
@@ -73,14 +72,14 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Product getById(int id) throws RepositoryException {
+    public Product getById(Long id) throws RepositoryException {
         try (Connection conn = connectionPool.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(GET_PRODUCT_BY_ID_QUERY);
-            statement.setInt(1, id);
+            statement.setLong(1, id);
             ResultSet result = statement.executeQuery();
             Product product = null;
             if (result.next()) {
-                int productId = result.getInt(1);
+                long productId = result.getLong(1);
                 String title = result.getString(2);
                 int priceInCents = result.getInt(3);
                 String description = result.getString(4);
@@ -103,10 +102,10 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public boolean remove(Integer id) throws RepositoryException {
+    public boolean remove(Long id) throws RepositoryException {
         try (Connection conn = connectionPool.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(REMOVE_PRODUCT_BY_ID_QUERY);
-            statement.setInt(1, id);
+            statement.setLong(1, id);
             int changedRows = statement.executeUpdate();
             return changedRows == 1;
         } catch (SQLException e) {
@@ -128,12 +127,12 @@ public class JdbcProductRepositoryImpl implements ProductRepository {
             statement.setInt(4, product.getProducer().getCompanyId());
             statement.setLong(5, product.getBarcode());
             statement.setBoolean(6, product.isOnSale());
-            if (update) statement.setInt(7, product.getId());
+            if (update) statement.setLong(7, product.getId());
             statement.executeUpdate();
 
             ResultSet keys = statement.getGeneratedKeys();
             if (keys.next()) {
-                int id = keys.getInt("product_id");
+                long id = keys.getLong("id");
                 return new Product(
                         id,
                         product.getTitle(),

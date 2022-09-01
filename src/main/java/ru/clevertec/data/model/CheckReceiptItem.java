@@ -7,7 +7,7 @@ import lombok.Value;
 @AllArgsConstructor
 public class CheckReceiptItem {
 
-    int quantity;
+    long quantity;
     Product product;
     long pricePerOneInCents;
     long fullPriceInCents;

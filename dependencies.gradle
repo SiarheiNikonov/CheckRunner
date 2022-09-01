@@ -9,7 +9,9 @@ ext {
             junit     : "5.9.0",
             servlet   : "4.0.1",
             lombok    : "1.18.24",
-            spring: "5.3.21"
+            spring: "5.3.21",
+            springdata: "2.7.2",
+            hibernatecore: "5.6.11.Final"
     ]
 
 }
