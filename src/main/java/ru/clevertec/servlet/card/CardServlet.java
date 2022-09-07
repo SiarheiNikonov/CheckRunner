@@ -7,7 +7,7 @@ import ru.clevertec.servlet.AbstractCrudServlet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 
-@WebServlet("/cards")
+
 public class CardServlet extends AbstractCrudServlet {
 
     @Override

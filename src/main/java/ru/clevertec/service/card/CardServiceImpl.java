@@ -50,7 +50,7 @@ public class CardServiceImpl implements CardService {
                 return add(card);
             }
             case DELETE: {
-                return removeById(data);
+                return removeById(data.split("=")[1]);
             }
         }
         return new Fail<>("Unknown method", 400);

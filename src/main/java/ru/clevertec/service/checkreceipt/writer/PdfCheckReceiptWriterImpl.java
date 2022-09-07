@@ -17,7 +17,7 @@ import java.util.List;
 public class PdfCheckReceiptWriterImpl implements CheckReceiptWriter {
 
     private static final String FONT = "fonts/arial.ttf";
-    private static final String LOGO = "/img/clevertec_logo.png";
+    private static final String LOGO = "img/clevertec_logo.png";
 
     @Override
     public void writeCheck(CheckReceipt receipt, OutputStream outputStream) throws DocumentException, IOException {
