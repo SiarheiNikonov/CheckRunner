@@ -8,6 +8,6 @@ import java.util.Map;
 
 public interface CheckReceiptCalculator {
 
-    CheckReceipt calculateCheckReceipt(Map<Product, Integer> order, DiscountCard card);
+    CheckReceipt calculateCheckReceipt(Map<Product, Long> order, DiscountCard card);
 
 }

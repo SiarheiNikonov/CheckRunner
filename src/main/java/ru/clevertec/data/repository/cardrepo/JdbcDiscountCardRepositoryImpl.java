@@ -11,7 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+
 @RequiredArgsConstructor
 public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
     private final ConnectionPool pool;
@@ -54,11 +54,11 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
             List<DiscountCard> cards = new ArrayList<>(pageSize == null ? DEFAULT_PAGE_SIZE : pageSize);
             while (resultSet.next()) {
                 DiscountCardType type = new DiscountCardType(
-                        resultSet.getInt(3),
+                        resultSet.getLong(3),
                         resultSet.getString(2),
                         resultSet.getInt(4)
                 );
-                cards.add(new DiscountCard(resultSet.getInt(1),type ));
+                cards.add(new DiscountCard(resultSet.getLong(1),type ));
             }
             statement.close();
             return cards;
@@ -67,10 +67,10 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
         }
     }
 
-    public boolean remove(Integer id) throws RepositoryException {
+    public boolean remove(Long id) throws RepositoryException {
         try (Connection conn = pool.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(REMOVE_CARD_BY_ID_QUERY);
-            statement.setInt(1, id);
+            statement.setLong(1, id);
             int changedRows = statement.executeUpdate();
             statement.close();
             return changedRows == 1;
@@ -83,7 +83,7 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
     public boolean update(DiscountCard product) throws RepositoryException {
         try (Connection conn = pool.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(UPDATE_CARD_TYPE_BY_ID_QUERY);
-            statement.setInt(2, product.getId());
+            statement.setLong(2, product.getId());
             statement.setString(1, product.getCardType().getTypeTitle());
             int changedRows = statement.executeUpdate();
             statement.close();
@@ -109,7 +109,7 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
             statement.executeUpdate();
             resultSet = statement.getGeneratedKeys();
             if(resultSet.next()) {
-                int id = resultSet.getInt("card_id");
+                long id = resultSet.getLong("card_id");
                 statement.close();
                 return new DiscountCard(id, card.getCardType());
             } else return null;
@@ -119,20 +119,20 @@ public class JdbcDiscountCardRepositoryImpl implements DiscountCardRepository {
     }
 
     @Override
-    public DiscountCard getById(int id) throws RepositoryException {
+    public DiscountCard getById(Long id) throws RepositoryException {
         try (Connection conn = pool.getConnection()) {
             PreparedStatement statement = conn.prepareStatement(GET_CARD_BY_ID_QUERY);
-            statement.setInt(1, id);
+            statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             DiscountCard discountCard = null;
             if (resultSet.next()) {
                 String cardTypeTitle = resultSet.getString(2);
                 DiscountCardType cardType = new DiscountCardType(
-                        resultSet.getInt(3),
+                        resultSet.getLong(3),
                         resultSet.getString(2),
                         resultSet.getInt(4)
                 );
-                int cardId = resultSet.getInt(1);
+                long cardId = resultSet.getLong(1);
                 discountCard = new DiscountCard(cardId, cardType);
                 statement.close();
             }

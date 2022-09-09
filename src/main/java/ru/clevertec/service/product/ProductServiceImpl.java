@@ -56,9 +56,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     private Result<String> getById(String idText) {
-        int id;
+        long id;
         try {
-            id = Integer.parseInt(idText);
+            id = Long.parseLong(idText);
         } catch (NumberFormatException e) {
             return new Fail<>(String.format(WRONG_ID_FORMAT_MESSAGE, idText), REQUEST_ERROR_CODE);
         }
@@ -136,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
         } else return new Fail<>(EMPTY_PRODUCT_LIST_MESSAGE, REQUEST_ERROR_CODE);
     }
 
-    private Result<String> removeProductById(int id) {
+    private Result<String> removeProductById(long id) {
         if (isNumberNegativeOrZero(id)) return new Fail<>(String.format(NEGATIVE_ID_MESSAGE, id), REQUEST_ERROR_CODE);
         boolean result;
         try {
@@ -149,7 +149,7 @@ public class ProductServiceImpl implements ProductService {
                 : new Success<>("Product with such id not found");
     }
 
-    private boolean isNumberNegativeOrZero(int number) {
+    private boolean isNumberNegativeOrZero(long number) {
         return number <= 0;
     }
 
