@@ -1,6 +1,7 @@
 package ru.clevertec.data.model;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Builder
 @Entity
+@FieldDefaults(level=AccessLevel.PRIVATE)
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
