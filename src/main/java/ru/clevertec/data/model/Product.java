@@ -1,6 +1,7 @@
 package ru.clevertec.data.model;
 
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level=AccessLevel.PRIVATE)
 @Entity
 public class Product {
     @Id
