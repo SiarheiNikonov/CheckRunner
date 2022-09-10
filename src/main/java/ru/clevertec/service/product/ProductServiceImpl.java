@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
                 return add(product);
             }
             case DELETE: {
-                return removeById(data);
+                return removeById(data.split("=")[1]);
             }
         }
         return new Fail<>("Unknown method", 400);
